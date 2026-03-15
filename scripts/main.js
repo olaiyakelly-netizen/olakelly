@@ -1,9 +1,12 @@
-lucide.createIcons();
+if (window.lucide?.createIcons) {
+  window.lucide.createIcons();
+}
 
 const words = ["decisions", "influence", "energy", "responsibility", "commitments"];
 let currentWordIndex = 0;
 
 const animatedWord = document.getElementById("animatedWord");
+const animatedWordSlot = document.getElementById("animatedWordSlot");
 const header = document.getElementById("siteHeader");
 const appWrapper = document.getElementById("app-wrapper");
 
@@ -36,15 +39,36 @@ let isSubmitting = false;
 */
 const newsletterEndpoint = "";
 
-function setAnimatedWordWidth() {
-  if (!animatedWord) return;
-  // Use a temporary span to measure the longest word's actual width if necessary, 
-  // but 'ch' units are a good fallback for monospaced or consistent font sizes.
-  const longestWord = words.reduce((a, b) => (a.length > b.length ? a : b), "");
-  // We apply this to the parent of the word to prevent layout shift
-  if (animatedWord.parentElement) {
-    animatedWord.parentElement.style.minWidth = `${longestWord.length}ch`;
-  }
+function setAnimatedWordMetrics() {
+  if (!animatedWord || !animatedWordSlot) return;
+
+  const measure = document.createElement("span");
+  let maxWidth = 0;
+  let maxHeight = 0;
+
+  measure.style.position = "absolute";
+  measure.style.visibility = "hidden";
+  measure.style.pointerEvents = "none";
+  measure.style.whiteSpace = "nowrap";
+  measure.className = animatedWord.className;
+
+  document.body.appendChild(measure);
+
+  words.forEach((word) => {
+    measure.textContent = word;
+    const { width, height } = measure.getBoundingClientRect();
+    maxWidth = Math.max(maxWidth, width);
+    maxHeight = Math.max(maxHeight, height);
+  });
+
+  document.body.removeChild(measure);
+
+  const computedCursorStyles = window.getComputedStyle(document.getElementById("typingCursor"));
+  const cursorWidth = parseFloat(computedCursorStyles.width) || 0;
+  const cursorMarginLeft = parseFloat(computedCursorStyles.marginLeft) || 0;
+
+  animatedWordSlot.style.width = `${Math.ceil(maxWidth + cursorWidth + cursorMarginLeft + 6)}px`;
+  animatedWordSlot.style.height = `${Math.ceil(maxHeight)}px`;
 }
 
 function typeWord() {
@@ -229,7 +253,7 @@ function loadThemePreference() {
 }
 
 function init() {
-  setAnimatedWordWidth();
+  setAnimatedWordMetrics();
   loadThemePreference();
   initScrollEffects();
   initEventListeners();

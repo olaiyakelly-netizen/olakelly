@@ -12,3 +12,31 @@ Typography reinforces this tone. Raleway is used for headings to convey structur
 The voice of the brand is reflective, analytical, and grounded in real leadership experiences. It avoids hype, corporate clichés, and performative thought leadership. Instead, the tone favors thoughtful insight, practical wisdom, and occasionally a bit of wit — because leadership conversations should be intelligent, but they don’t have to be dull.
 
 Overall, the Ola Kelly brand should feel like a calm, credible voice in the leadership conversation: thoughtful, steady, and quietly confident.
+
+## Run locally
+
+From this folder, start a local web server with:
+
+```powershell
+.\start.ps1
+```
+
+Then open `http://localhost:8000` in your browser.
+
+Optional: choose a different port.
+
+```powershell
+.\start.ps1 -Port 3000
+```
+
+If PowerShell blocks local scripts on your machine, you can still run:
+
+```powershell
+python -m http.server 8000
+```
+
+or:
+
+```powershell
+py -m http.server 8000
+```
