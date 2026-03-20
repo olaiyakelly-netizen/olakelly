@@ -1459,6 +1459,77 @@ input:focus-visible,
   margin-top: 8px;
 }
 
+.policy-page-hero {
+  padding: 150px 32px 56px;
+}
+
+.policy-page-inner,
+.policy-page-content {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.policy-page-title {
+  margin: 0;
+  color: var(--color-cosmic-void);
+  font-size: clamp(40px, 5vw, 60px);
+  line-height: 1.04;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+
+.policy-page-subhead {
+  max-width: 680px;
+  margin: 24px 0 0;
+  color: var(--color-ink-soft);
+  font-size: 20px;
+  line-height: 1.72;
+}
+
+.policy-page-meta {
+  margin: 16px 0 8px;
+  color: rgba(74, 74, 90, 0.68);
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+.policy-page-section {
+  padding: 24px 32px 120px;
+}
+
+.policy-page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+.policy-page-block {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.policy-page-heading {
+  margin: 0 0 8px;
+  color: var(--color-cosmic-void);
+  font-size: clamp(28px, 4vw, 38px);
+  line-height: 1.16;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+.policy-page-block .body-copy {
+  line-height: 1.8;
+}
+
+.policy-page-note {
+  margin: 2px 0 0;
+  color: #4a4a5a;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
 .about-intro {
   max-width: 720px;
   margin: 0 auto;
@@ -1750,6 +1821,8 @@ html.dark-mode .hero-title,
 html.dark-mode .section-heading,
 html.dark-mode .about-page-title,
 html.dark-mode .about-page-heading,
+html.dark-mode .policy-page-title,
+html.dark-mode .policy-page-heading,
 html.dark-mode .article-title,
 html.dark-mode .card-title,
 html.dark-mode .about-strong,
@@ -1760,6 +1833,7 @@ html.dark-mode .newsletter-label {
 html.dark-mode .hero-body,
 html.dark-mode .about-page-subhead,
 html.dark-mode .body-copy,
+html.dark-mode .policy-page-subhead,
 html.dark-mode .supporting-text,
 html.dark-mode .eyebrow-text,
 html.dark-mode .newsletter-reassurance,
@@ -1769,6 +1843,14 @@ html.dark-mode .about-image-placeholder {
 
 html.dark-mode .about-page-supporting {
   color: rgba(251, 246, 242, 0.82);
+}
+
+html.dark-mode .policy-page-meta {
+  color: rgba(251, 246, 242, 0.56);
+}
+
+html.dark-mode .policy-page-note {
+  color: rgba(251, 246, 242, 0.66);
 }
 
 html.dark-mode .article-card,
@@ -2118,7 +2200,17 @@ html.dark-mode .framework-step-button.is-active {
     padding-bottom: 54px;
   }
 
+  .policy-page-hero {
+    padding-top: 132px;
+    padding-bottom: 46px;
+  }
+
   .about-page-section {
+    padding-top: 18px;
+    padding-bottom: 98px;
+  }
+
+  .policy-page-section {
     padding-top: 18px;
     padding-bottom: 98px;
   }
@@ -2127,7 +2219,15 @@ html.dark-mode .framework-step-button.is-active {
     gap: 60px;
   }
 
+  .policy-page-content {
+    gap: 46px;
+  }
+
   .about-page-block {
+    gap: 18px;
+  }
+
+  .policy-page-block {
     gap: 18px;
   }
 
@@ -2146,9 +2246,19 @@ html.dark-mode .framework-step-button.is-active {
     padding-bottom: 42px;
   }
 
+  .policy-page-hero {
+    padding-top: 118px;
+    padding-bottom: 38px;
+  }
+
   .about-page-subhead {
     margin-top: 22px;
     font-size: 19px;
+  }
+
+  .policy-page-subhead {
+    margin-top: 20px;
+    font-size: 18px;
   }
 
   .about-page-section {
@@ -2156,8 +2266,17 @@ html.dark-mode .framework-step-button.is-active {
     padding-bottom: 82px;
   }
 
+  .policy-page-section {
+    padding-top: 12px;
+    padding-bottom: 82px;
+  }
+
   .about-page-content {
     gap: 48px;
+  }
+
+  .policy-page-content {
+    gap: 40px;
   }
 
   .about-page-actions {
