@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,25 +9,23 @@
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Lato:wght@300;400;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Lato:wght@300;400;700&family=Playfair+Display:wght@600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/main.css?v=20260316u">
 </head>
-
 <body class="h-full">
   <div id="app-wrapper" class="w-full h-full overflow-auto">
-
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <header class="site-header" id="siteHeader">
       <div class="container-shell">
         <nav class="header-nav flex items-center justify-between" aria-label="Main navigation">
-
           <a href="#home" id="wordmark" class="font-heading wordmark">Ola Kelly</a>
 
           <div class="hidden md:flex items-center desktop-nav">
             <a href="#home" class="nav-link nav-link-text">Home</a>
             <a href="#ideas" class="nav-link nav-link-text">Ideas</a>
-            <a href="#framework" class="nav-link nav-link-text">STEWARD Framework</a>
+            <a href="#framework" class="nav-link nav-link-text">STEWARD Framework<sup>&trade;</sup></a>
             <a href="#about" class="nav-link nav-link-text">About</a>
             <span class="nav-divider"></span>
             <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
@@ -57,11 +54,10 @@
         </div>
 
         <div class="flex flex-col mobile-panel-links">
-          <a href="#home" id="mobileNavHome" class="font-heading mobile-nav-link-text">Home</a>
-          <a href="#ideas" id="mobileNavIdeas" class="font-heading mobile-nav-link-text">Ideas</a>
-          <a href="#framework" id="mobileNavFramework" class="font-heading mobile-nav-link-text">STEWARD Framework</a>
-          <a href="#about" id="mobileNavAbout" class="font-heading mobile-nav-link-text">About</a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" id="mobileNavLinkedin" class="font-heading mobile-nav-link-text">LinkedIn</a>
+          <a href="#home" class="font-heading mobile-nav-link-text">Home</a>
+          <a href="#ideas" class="font-heading mobile-nav-link-text">Ideas</a>
+          <a href="#framework" class="font-heading mobile-nav-link-text">STEWARD Framework<sup>&trade;</sup></a>
+          <a href="#about" class="font-heading mobile-nav-link-text">About</a>
 
           <hr class="mobile-panel-rule">
 
@@ -76,370 +72,467 @@
       </div>
     </aside>
 
-    <main>
+    <main id="main-content">
       <section id="home" class="hero-section">
         <div class="hero-inner">
-          <p id="eyebrowText" class="font-heading animate-rise delay-1 eyebrow-text">Ideas on Responsible Leadership</p>
+          <div class="hero-heading-stack">
+            <p class="font-heading animate-rise delay-1 eyebrow-text">Thoughtful Leadership for Sustainable Influence</p>
+            <hr class="gold-rule animate-rise delay-2">
 
-          <hr class="gold-rule animate-rise delay-2">
+            <h1 class="font-heading animate-rise delay-2 hero-title">
+              Leadership is stewardship.
+            </h1>
 
-          <h1 id="headlineText" class="font-heading animate-rise delay-2 hero-title">
-            Leadership is stewardship.
-          </h1>
+            <div class="animate-rise delay-3 hero-animated-row-wrap" aria-live="polite">
+              <div id="heroRotator" class="hero-rotator">
+                <div class="rotator-line">
+                  <span class="rotator-text-line">Ambition is easy.</span>
+                  <span class="rotator-text-line">Sustaining it is not.</span>
+                </div>
 
-          <div class="animate-rise delay-3 hero-animated-row-wrap">
-            <p class="font-heading hero-animated-row">
-              <span id="stewarding-word">Stewarding</span>
-              <span id="animatedWordSlot" class="animated-word-slot">
-                <span class="animated-word-live">
-                  <span id="animatedWord" class="animated-word"></span>
-                  <span class="typing-cursor" id="typingCursor"></span>
-                </span>
-              </span>
+                <div class="rotator-line">
+                  <span class="rotator-text-line">Ambition begins the work.</span>
+                  <span class="rotator-text-line">Stewardship sustains it.</span>
+                </div>
+
+                <div class="rotator-line">
+                  <span class="rotator-text-line">Success is not the challenge.</span>
+                  <span class="rotator-text-line">Sustainability is.</span>
+                </div>
+
+                <div class="rotator-line">
+                  <span class="rotator-text-line">Saying yes is easy.</span>
+                  <span class="rotator-text-line">Carrying it well is not.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-support">
+            <p class="font-body animate-rise delay-4 hero-body">
+              Leadership is not ownership of influence. It is stewardship of influence, judgment, and capacity.
+              The STEWARD Framework helps leaders evaluate commitments before they become obligations.
+            </p>
+
+            <div class="flex flex-wrap items-center animate-rise delay-5 hero-cta-row">
+              <button id="primaryCtaBtn" class="btn-primary" aria-describedby="heroSupportingText">Explore the Framework</button>
+            </div>
+
+            <p id="heroSupportingText" class="font-body animate-rise delay-6 supporting-text">
+              Essays, frameworks, and reflections on responsible leadership.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="ideas" class="content-section">
+        <div class="container-shell">
+          <div class="section-intro-wrap">
+            <h2 class="font-heading section-heading">Ideas I&rsquo;m Exploring</h2>
+            <p class="font-body body-copy">
+              Leadership is not ownership of influence. It is stewardship of influence, judgment, and consequence.
+              These essays explore how thoughtful leaders evaluate commitments and pursue meaningful ambition without exhausting the capacity required to sustain it.
             </p>
           </div>
 
-          <p id="bodyText" class="font-body animate-rise delay-4 hero-body">
-            Leadership carries responsibility. The most thoughtful leaders do not simply accumulate influence.
-            They learn to steward commitments, energy, and decisions deliberately so success remains sustainable
-            rather than exhausting.
-          </p>
+          <div class="article-grid grid">
+            <article class="article-card ideas-rise flex flex-col">
+              <h3 class="font-heading article-title">Imposter Syndrome and Ethical Self-Awareness</h3>
+              <p class="font-body body-copy article-excerpt">
+                Feeling unprepared is not always weakness. It can be evidence that responsibility is being taken seriously rather than performed with false certainty.
+              </p>
+              <a href="#" class="read-more-link cta-link">Read More</a>
+            </article>
 
-          <div class="flex flex-wrap items-center animate-rise delay-5 hero-cta-row">
-            <button id="primaryCtaBtn" class="btn-primary">Explore the Ideas</button>
-            <button id="secondaryCtaBtn" class="btn-secondary">The STEWARD Framework</button>
+            <article class="article-card ideas-rise flex flex-col">
+              <h3 class="font-heading article-title">Leading Without a Title</h3>
+              <p class="font-body body-copy article-excerpt">
+                Influence is rarely granted by title alone. It is earned through credibility, restraint, and the steady stewardship of trust.
+              </p>
+              <a href="#" class="read-more-link cta-link">Read More</a>
+            </article>
+
+            <article class="article-card ideas-rise flex flex-col">
+              <h3 class="font-heading article-title">The Hidden Cost of Saying Yes Too Quickly</h3>
+              <p class="font-body body-copy article-excerpt">
+                Opportunities can appear generous while quietly displacing focus, energy, and mission. Deliberate leadership names the cost before accepting the role.
+              </p>
+              <a href="#" class="read-more-link cta-link">Read More</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="framework" class="framework-section">
+        <div class="container-shell">
+          <div class="framework-header">
+            <h2 class="font-heading framework-title">The STEWARD Framework<sup>&trade;</sup></h2>
+            <p class="font-body framework-intro">
+              A seven-step decision cycle for evaluating responsibility before accepting new commitments. It helps leaders examine scope, energy, alignment, and consequence with clarity rather than impulse.
+            </p>
           </div>
 
-          <p id="supportingText" class="font-body animate-rise delay-6 supporting-text">
-            Thoughtful essays, practical frameworks, and leadership reflections.
-          </p>
+          <div class="framework-shell">
+            <div class="framework-visual-column">
+              <div id="frameworkDiagram" class="framework-diagram" aria-label="The STEWARD Framework interactive decision cycle">
+                <svg class="framework-diagram-svg" viewBox="0 0 900 900" role="img" aria-hidden="true">
+                  <defs>
+                    <filter id="frameworkCenterGlow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#000000" flood-opacity="0.28"></feDropShadow>
+                    </filter>
+                    <marker id="frameworkDirectionArrowhead" markerWidth="8" markerHeight="8" refX="6.5" refY="3.5" orient="auto">
+                      <path d="M 0 0 L 7 3.5 L 0 7 z" fill="#d4af37" opacity="0.92"></path>
+                    </marker>
+                  </defs>
+                  <circle class="framework-ring" cx="450" cy="450" r="312"></circle>
+                  <circle class="framework-flow-ring" cx="450" cy="450" r="252"></circle>
+                  <g id="frameworkDirectionMarkers"></g>
+                  <circle class="framework-center-disc" cx="450" cy="450" r="142"></circle>
+                  <text x="450" y="428" text-anchor="middle" class="framework-center-word">STEWARD</text>
+                  <text x="450" y="462" text-anchor="middle" class="framework-center-subtitle">Framework&trade;</text>
+                  <text x="450" y="487" text-anchor="middle" class="framework-center-caption">Leadership Stewardship Cycle</text>
+                </svg>
+                <div id="frameworkNodes" class="framework-node-layer"></div>
+              </div>
+
+              <div class="framework-question-wrap text-center">
+                <p class="font-heading framework-question">Before I say yes, have I stewarded this decision?</p>
+              </div>
+
+              <!-- STEWARD Timeline Expansion -->
+              <section id="steward-timeline" class="steward-timeline bg-[#050a30] px-6 pb-20 pt-8 md:pt-10">
+                <div class="steward-timeline-shell mx-auto max-w-5xl">
+                  <!-- Intro -->
+                  <div class="steward-timeline-intro mx-auto max-w-3xl text-center">
+                    <p class="steward-timeline-kicker text-sm font-medium uppercase tracking-[0.28em] text-[#d4af37]/80">
+                      Decision Cycle
+                    </p>
+                    <h3 class="steward-timeline-title mt-4 font-['Playfair_Display'] text-3xl leading-tight text-[#fbf6f2] md:text-4xl">
+                      This is how a steward evaluates a decision.
+                    </h3>
+                    <p class="steward-timeline-description mx-auto mt-4 max-w-2xl font-['Raleway'] text-sm leading-7 text-[#e7dccf]/80 md:text-base">
+                      The STEWARD Framework is a decision cycle for evaluating commitments before they become obligations.
+                    </p>
+                  </div>
+
+                  <!-- Timeline -->
+                  <div class="steward-timeline-track relative mx-auto mt-14 max-w-4xl">
+                    <!-- vertical line -->
+                    <div class="steward-timeline-line absolute left-[22px] top-0 h-full w-px bg-[#d4af37]/35 md:left-1/2 md:-translate-x-1/2"></div>
+
+                    <div class="steward-timeline-list space-y-8 md:space-y-10">
+                      <!-- S -->
+                      <div class="steward-timeline-row steward-timeline-row-left relative grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-10">
+                        <div class="steward-timeline-column steward-timeline-column-primary md:pr-14 md:text-right">
+                          <div class="steward-timeline-card reveal-card ml-14 rounded-[24px] border border-[#d4af37]/18 bg-white/5 p-6 backdrop-blur-sm md:ml-0">
+                            <div class="step-header">
+                              <span class="signature-letter steward-letter steward-timeline-letter text-[#d4af37]">S</span>
+                              <p class="steward-timeline-step font-['Raleway'] text-[11px] font-semibold uppercase tracking-[0.24em] text-[#d4af37]/80">
+                                Step 1
+                              </p>
+                            </div>
+                            <h4 class="steward-timeline-card-title mt-2 font-['Raleway'] text-xl font-semibold text-[#fbf6f2]">
+                              Scope the Responsibility
+                            </h4>
+                            <p class="steward-timeline-card-copy mt-3 font-['Raleway'] text-sm leading-7 text-[#e7dccf]/80 md:text-[15px]">
+                              Define what this actually requires before you agree. Vague commitments are where overextension likes to hide.
+                            </p>
+                          </div>
+                        </div>
+                        <div class="steward-timeline-column steward-timeline-column-secondary"></div>
+                        <div class="steward-timeline-dot absolute left-[22px] top-8 z-10 h-3.5 w-3.5 -translate-x-1/2 rounded-full border-2 border-[#050a30] bg-[#d4af37] md:left-1/2"></div>
+                      </div>
+
+                      <!-- T -->
+                      <div class="steward-timeline-row steward-timeline-row-right relative grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-10">
+                        <div class="steward-timeline-column steward-timeline-column-secondary"></div>
+                        <div class="steward-timeline-column steward-timeline-column-primary md:pl-14">
+                          <div class="steward-timeline-card reveal-card ml-14 rounded-[24px] border border-[#d4af37]/18 bg-white/5 p-6 backdrop-blur-sm md:ml-0">
+                            <div class="step-header">
+                              <span class="signature-letter steward-letter steward-timeline-letter text-[#d4af37]">T</span>
+                              <p class="steward-timeline-step font-['Raleway'] text-[11px] font-semibold uppercase tracking-[0.24em] text-[#d4af37]/80">
+                                Step 2
+                              </p>
+                            </div>
+                            <h4 class="steward-timeline-card-title mt-2 font-['Raleway'] text-xl font-semibold text-[#fbf6f2]">
+                              Trade-Off Analysis
+                            </h4>
+                            <p class="steward-timeline-card-copy mt-3 font-['Raleway'] text-sm leading-7 text-[#e7dccf]/80 md:text-[15px]">
+                              Name what this will displace. Every yes costs something, even when the opportunity looks good in navy and gold.
+                            </p>
+                          </div>
+                        </div>
+                        <div class="steward-timeline-dot absolute left-[22px] top-8 z-10 h-3.5 w-3.5 -translate-x-1/2 rounded-full border-2 border-[#050a30] bg-[#d4af37] md:left-1/2"></div>
+                      </div>
+
+                      <!-- E -->
+                      <div class="steward-timeline-row steward-timeline-row-left relative grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-10">
+                        <div class="steward-timeline-column steward-timeline-column-primary md:pr-14 md:text-right">
+                          <div class="steward-timeline-card reveal-card ml-14 rounded-[24px] border border-[#d4af37]/18 bg-white/5 p-6 backdrop-blur-sm md:ml-0">
+                            <div class="step-header">
+                              <span class="signature-letter steward-letter steward-timeline-letter text-[#d4af37]">E</span>
+                              <p class="steward-timeline-step font-['Raleway'] text-[11px] font-semibold uppercase tracking-[0.24em] text-[#d4af37]/80">
+                                Step 3
+                              </p>
+                            </div>
+                            <h4 class="steward-timeline-card-title mt-2 font-['Raleway'] text-xl font-semibold text-[#fbf6f2]">
+                              Energy Audit
+                            </h4>
+                            <p class="steward-timeline-card-copy mt-3 font-['Raleway'] text-sm leading-7 text-[#e7dccf]/80 md:text-[15px]">
+                              Assess your physical, emotional, and cognitive capacity. A decision can be right on paper and still wrong for your current season.
+                            </p>
+                          </div>
+                        </div>
+                        <div class="steward-timeline-column steward-timeline-column-secondary"></div>
+                        <div class="steward-timeline-dot absolute left-[22px] top-8 z-10 h-3.5 w-3.5 -translate-x-1/2 rounded-full border-2 border-[#050a30] bg-[#d4af37] md:left-1/2"></div>
+                      </div>
+
+                      <!-- W -->
+                      <div class="steward-timeline-row steward-timeline-row-right relative grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-10">
+                        <div class="steward-timeline-column steward-timeline-column-secondary"></div>
+                        <div class="steward-timeline-column steward-timeline-column-primary md:pl-14">
+                          <div class="steward-timeline-card reveal-card ml-14 rounded-[24px] border border-[#d4af37]/18 bg-white/5 p-6 backdrop-blur-sm md:ml-0">
+                            <div class="step-header">
+                              <span class="signature-letter steward-letter steward-timeline-letter text-[#d4af37]">W</span>
+                              <p class="steward-timeline-step font-['Raleway'] text-[11px] font-semibold uppercase tracking-[0.24em] text-[#d4af37]/80">
+                                Step 4
+                              </p>
+                            </div>
+                            <h4 class="steward-timeline-card-title mt-2 font-['Raleway'] text-xl font-semibold text-[#fbf6f2]">
+                              Weighted Priorities
+                            </h4>
+                            <p class="steward-timeline-card-copy mt-3 font-['Raleway'] text-sm leading-7 text-[#e7dccf]/80 md:text-[15px]">
+                              Determine whether this moves the mission forward. Not every worthy request deserves equal weight.
+                            </p>
+                          </div>
+                        </div>
+                        <div class="steward-timeline-dot absolute left-[22px] top-8 z-10 h-3.5 w-3.5 -translate-x-1/2 rounded-full border-2 border-[#050a30] bg-[#d4af37] md:left-1/2"></div>
+                      </div>
+
+                      <!-- A -->
+                      <div class="steward-timeline-row steward-timeline-row-left relative grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-10">
+                        <div class="steward-timeline-column steward-timeline-column-primary md:pr-14 md:text-right">
+                          <div class="steward-timeline-card reveal-card ml-14 rounded-[24px] border border-[#d4af37]/18 bg-white/5 p-6 backdrop-blur-sm md:ml-0">
+                            <div class="step-header">
+                              <span class="signature-letter steward-letter steward-timeline-letter text-[#d4af37]">A</span>
+                              <p class="steward-timeline-step font-['Raleway'] text-[11px] font-semibold uppercase tracking-[0.24em] text-[#d4af37]/80">
+                                Step 5
+                              </p>
+                            </div>
+                            <h4 class="steward-timeline-card-title mt-2 font-['Raleway'] text-xl font-semibold text-[#fbf6f2]">
+                              Alignment Check
+                            </h4>
+                            <p class="steward-timeline-card-copy mt-3 font-['Raleway'] text-sm leading-7 text-[#e7dccf]/80 md:text-[15px]">
+                              Make sure this fits your role, your season, and your longer trajectory. Good opportunities can still be wrong assignments.
+                            </p>
+                          </div>
+                        </div>
+                        <div class="steward-timeline-column steward-timeline-column-secondary"></div>
+                        <div class="steward-timeline-dot absolute left-[22px] top-8 z-10 h-3.5 w-3.5 -translate-x-1/2 rounded-full border-2 border-[#050a30] bg-[#d4af37] md:left-1/2"></div>
+                      </div>
+
+                      <!-- R -->
+                      <div class="steward-timeline-row steward-timeline-row-right relative grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-10">
+                        <div class="steward-timeline-column steward-timeline-column-secondary"></div>
+                        <div class="steward-timeline-column steward-timeline-column-primary md:pl-14">
+                          <div class="steward-timeline-card reveal-card ml-14 rounded-[24px] border border-[#d4af37]/18 bg-white/5 p-6 backdrop-blur-sm md:ml-0">
+                            <div class="step-header">
+                              <span class="signature-letter steward-letter steward-timeline-letter text-[#d4af37]">R</span>
+                              <p class="steward-timeline-step font-['Raleway'] text-[11px] font-semibold uppercase tracking-[0.24em] text-[#d4af37]/80">
+                                Step 6
+                              </p>
+                            </div>
+                            <h4 class="steward-timeline-card-title mt-2 font-['Raleway'] text-xl font-semibold text-[#fbf6f2]">
+                              Risk Anticipation
+                            </h4>
+                            <p class="steward-timeline-card-copy mt-3 font-['Raleway'] text-sm leading-7 text-[#e7dccf]/80 md:text-[15px]">
+                              Consider the likely consequences, constraints, and pressure points. Stewardship asks you to think past the enthusiasm of the moment.
+                            </p>
+                          </div>
+                        </div>
+                        <div class="steward-timeline-dot absolute left-[22px] top-8 z-10 h-3.5 w-3.5 -translate-x-1/2 rounded-full border-2 border-[#050a30] bg-[#d4af37] md:left-1/2"></div>
+                      </div>
+
+                      <!-- D -->
+                      <div class="steward-timeline-row steward-timeline-row-left relative grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-10">
+                        <div class="steward-timeline-column steward-timeline-column-primary md:pr-14 md:text-right">
+                          <div class="steward-timeline-card reveal-card ml-14 rounded-[24px] border border-[#d4af37]/18 bg-white/5 p-6 backdrop-blur-sm md:ml-0">
+                            <div class="step-header">
+                              <span class="signature-letter steward-letter steward-timeline-letter text-[#d4af37]">D</span>
+                              <p class="steward-timeline-step font-['Raleway'] text-[11px] font-semibold uppercase tracking-[0.24em] text-[#d4af37]/80">
+                                Step 7
+                              </p>
+                            </div>
+                            <h4 class="steward-timeline-card-title mt-2 font-['Raleway'] text-xl font-semibold text-[#fbf6f2]">
+                              Deliberate Boundaries
+                            </h4>
+                            <p class="steward-timeline-card-copy mt-3 font-['Raleway'] text-sm leading-7 text-[#e7dccf]/80 md:text-[15px]">
+                              Define expectations, limits, and operating conditions before you begin. Boundaries are not resistance. They are structure.
+                            </p>
+                          </div>
+                        </div>
+                        <div class="steward-timeline-column steward-timeline-column-secondary"></div>
+                        <div class="steward-timeline-dot absolute left-[22px] top-8 z-10 h-3.5 w-3.5 -translate-x-1/2 rounded-full border-2 border-[#050a30] bg-[#d4af37] md:left-1/2"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="practice" class="content-section practice-section">
+        <div class="container-shell">
+          <div class="section-center-intro">
+            <h2 class="font-heading section-heading">STEWARD in Practice</h2>
+            <p class="font-body body-copy">
+              The framework becomes useful when real opportunities arrive. These are the kinds of questions it is designed to slow down and clarify.
+            </p>
+          </div>
+
+          <div class="decision-grid grid">
+            <div class="decision-card">
+              <span class="decision-marker" aria-hidden="true"></span>
+              <h3 class="card-title decision-title">Should I accept this leadership role?</h3>
+              <p class="font-body body-copy">Capability is not the question. Capacity is. Carry it well&mdash;or don't carry it at all.</p>
+            </div>
+
+            <div class="decision-card">
+              <span class="decision-marker" aria-hidden="true"></span>
+              <h3 class="card-title decision-title">Should I join this board?</h3>
+              <p class="font-body body-copy">Boards do not just need names. They need capacity. If your presence is symbolic, reconsider. If it is strategic, commit.</p>
+            </div>
+
+            <div class="decision-card">
+              <span class="decision-marker" aria-hidden="true"></span>
+              <h3 class="card-title decision-title">Should I lead this initiative?</h3>
+              <p class="font-body body-copy">Leadership is not ownership. It is stewardship. If you cannot sustain it, you should not start it.</p>
+            </div>
+
+            <div class="decision-card">
+              <span class="decision-marker" aria-hidden="true"></span>
+              <h3 class="card-title decision-title">Should I say yes to this opportunity?</h3>
+              <p class="font-body body-copy">Every yes spends something. Name the cost before you agree to pay it.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="content-section about-section">
+        <div class="container-shell">
+          <div class="about-intro">
+            <h2 class="font-heading section-heading about-title">What Stewardship Requires</h2>
+          </div>
+
+          <div class="about-grid grid">
+            <div class="about-copy-stack">
+              <div class="about-group">
+                <p class="font-body body-copy about-strong">
+                  Stewardship begins with a different question.
+                </p>
+                <p class="font-body body-copy">
+                  Influence is not something you own. It is something you are entrusted to carry.
+                </p>
+              </div>
+              <div class="about-group">
+                <p class="font-body body-copy about-transition">
+                  That changes the standard entirely.
+                </p>
+                <p class="font-body body-copy">
+                  A steward doesn&rsquo;t ask, &ldquo;What can I take on?&rdquo;<br>
+                  They ask, &ldquo;What am I responsible for&mdash;and what will it cost to carry it well?&rdquo;
+                </p>
+              </div>
+              <div class="about-group">
+                <p class="font-body body-copy">
+                  Every yes has weight.<br>
+                  On your time. Your energy. Your judgment.<br>
+                  And on the people who are affected by your decisions.
+                </p>
+              </div>
+              <div class="about-group">
+                <p class="font-body body-copy about-closing">
+                  The goal is not more leadership.<br>
+                  It is better leadership&mdash;clearer thinking, stronger boundaries, and responsibility carried with intention.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="newsletter" class="content-section">
+        <div class="newsletter-shell">
+          <h2 class="font-heading section-heading newsletter-title text-center">Stay in the Conversation</h2>
+
+          <div class="newsletter-copy text-center">
+            <p class="font-body body-copy about-strong">Occasional reflections on stewardship, responsibility, and the cost of leadership.</p>
+            <p class="font-body body-copy">For leaders who think carefully about what they carry&mdash;and why it matters.</p>
+          </div>
+
+          <form id="newsletterForm" class="newsletter-form">
+            <div class="newsletter-field-wrap">
+              <label for="emailInput" class="font-heading newsletter-label">Email address</label>
+              <input type="email" id="emailInput" placeholder="your@email.com" required>
+            </div>
+            <button type="submit" id="newsletterBtn" class="btn-primary newsletter-btn">Subscribe</button>
+          </form>
+
+          <p class="font-body newsletter-reassurance">No noise. Just perspective worth carrying.</p>
+
+          <div id="successMessage" class="message-box success-message" style="display: none;">
+            <p class="font-body">Thank you. You&rsquo;re now in the conversation.</p>
+          </div>
+
+          <div id="errorMessage" class="message-box error-message" style="display: none;">
+            <p class="font-body" id="errorText">Please enter a valid email.</p>
+          </div>
         </div>
       </section>
     </main>
-
-    <div class="divider-wrap">
-      <div class="divider-line divider-left"></div>
-      <div class="divider-dot"></div>
-      <div class="divider-line divider-right"></div>
-    </div>
-
-    <section id="ideas" class="content-section">
-      <div class="container-shell">
-        <div class="section-intro-wrap">
-          <h2 id="sectionTitle" class="font-heading section-heading">Ideas on Leadership Stewardship</h2>
-          <p id="sectionIntro" class="font-body body-copy">
-            Leadership is not ownership of influence.<br>
-            It is stewardship of it.<br><br>
-            These essays explore how thoughtful leaders evaluate commitments, manage responsibility, and pursue
-            meaningful ambition without sacrificing the energy required to sustain it.
-          </p>
-        </div>
-
-        <div class="article-grid grid">
-          <article class="article-card ideas-rise flex flex-col">
-            <h3 id="article1Title" class="font-heading article-title">Imposter Syndrome and Ethical Self-Awareness</h3>
-            <p id="article1Excerpt" class="font-body body-copy article-excerpt">
-              Feeling unprepared is not weakness—it’s often the mark of ethical awareness. How to build confidence
-              grounded in honest self-assessment rather than false certainty.
-            </p>
-            <a href="#" class="read-more-link cta-link">Read More →</a>
-          </article>
-
-          <article class="article-card ideas-rise flex flex-col">
-            <h3 id="article2Title" class="font-heading article-title">Leading Without a Title</h3>
-            <p id="article2Excerpt" class="font-body body-copy article-excerpt">
-              Authority comes from influence, not position. Explore how stewards shape outcomes through credibility,
-              trust, and clarity—regardless of formal authority.
-            </p>
-            <a href="#" class="read-more-link cta-link">Read More →</a>
-          </article>
-
-          <article class="article-card ideas-rise flex flex-col">
-            <h3 id="article3Title" class="font-heading article-title">The Hidden Cost of Saying Yes Too Quickly</h3>
-            <p id="article3Excerpt" class="font-body body-copy article-excerpt">
-              Overcommitment drains energy and dilutes impact. Why thoughtful leaders say no—and how to distinguish
-              between opportunity and obligation.
-            </p>
-            <a href="#" class="read-more-link cta-link">Read More →</a>
-          </article>
-        </div>
-
-        <div class="section-center-link text-center">
-          <a id="viewAllLink" href="#ideas" class="font-heading cta-link">View All Writing →</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="framework" class="content-section">
-      <div class="container-shell">
-        <div class="section-center-intro">
-          <h2 id="frameworkTitle" class="font-heading section-heading">The STEWARD Framework™</h2>
-          <p id="frameworkIntro" class="font-body body-copy">
-            The STEWARD Framework is a leadership decision discipline for evaluating responsibility, opportunity,
-            and influence before accepting new commitments.<br><br>
-            It helps leaders move from reactive decision-making to deliberate stewardship.
-          </p>
-        </div>
-
-        <div class="framework-grid grid">
-          <div class="framework-card">
-            <div class="card-head"><span class="card-letter">S</span>
-              <h3 id="element_s_title" class="card-title">Scope the Responsibility</h3>
-            </div>
-            <p id="element_s_desc" class="font-body body-copy">Define what the responsibility actually includes before
-              agreeing.</p>
-          </div>
-
-          <div class="framework-card">
-            <div class="card-head"><span class="card-letter">T</span>
-              <h3 id="element_t_title" class="card-title">Trade-Off Analysis</h3>
-            </div>
-            <p id="element_t_desc" class="font-body body-copy">Evaluate what the commitment will displace.</p>
-          </div>
-
-          <div class="framework-card">
-            <div class="card-head"><span class="card-letter">E</span>
-              <h3 id="element_e_title" class="card-title">Energy Audit</h3>
-            </div>
-            <p id="element_e_desc" class="font-body body-copy">Assess physical, emotional, and cognitive capacity.</p>
-          </div>
-
-          <div class="framework-card">
-            <div class="card-head"><span class="card-letter">W</span>
-              <h3 id="element_w_title" class="card-title">Weighted Priorities</h3>
-            </div>
-            <p id="element_w_desc" class="font-body body-copy">Determine whether the opportunity meaningfully moves the
-              mission forward.</p>
-          </div>
-
-          <div class="framework-card">
-            <div class="card-head"><span class="card-letter">A</span>
-              <h3 id="element_a_title" class="card-title">Alignment Check</h3>
-            </div>
-            <p id="element_a_desc" class="font-body body-copy">Ensure the responsibility aligns with role, season, and
-              long-term trajectory.</p>
-          </div>
-
-          <div class="framework-card">
-            <div class="card-head"><span class="card-letter">R</span>
-              <h3 id="element_r_title" class="card-title">Risk Anticipation</h3>
-            </div>
-            <p id="element_r_desc" class="font-body body-copy">Identify potential consequences and sources of
-              overextension.</p>
-          </div>
-
-          <div class="framework-card">
-            <div class="card-head"><span class="card-letter">D</span>
-              <h3 id="element_d_title" class="card-title">Deliberate Boundaries</h3>
-            </div>
-            <p id="element_d_desc" class="font-body body-copy">Define expectations, structure, and limits before saying
-              yes.</p>
-          </div>
-        </div>
-
-        <div class="framework-question-wrap text-center">
-          <p id="triggerQuestion" class="font-heading framework-question">
-            Before I say yes, have I stewarded this decision?
-          </p>
-        </div>
-
-        <div class="section-center-link text-center">
-          <button id="frameworkCtaBtn" class="btn-primary">How to Steward a Decision</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="content-section">
-      <div class="container-shell">
-        <div class="section-center-intro">
-          <h2 id="decisionsTitle" class="font-heading section-heading">Leadership Decisions</h2>
-          <p id="decisionsIntro" class="font-body body-copy">
-            The STEWARD Framework is designed to guide real leadership decisions.<br><br>
-            Many responsibilities appear attractive on the surface, but thoughtful leaders evaluate the full
-            implications before agreeing to them.<br><br>
-            The framework provides a structured way to examine commitments deliberately rather than reacting to them.
-          </p>
-        </div>
-
-        <div class="decision-grid grid">
-          <div class="decision-card">
-            <h3 id="decision1Title" class="card-title decision-title">Should I accept this leadership role?</h3>
-            <p id="decision1Desc" class="font-body body-copy">Before stepping into a new leadership position, thoughtful
-              leaders evaluate scope, expectations, trade-offs, and long-term alignment.</p>
-          </div>
-
-          <div class="decision-card">
-            <h3 id="decision2Title" class="card-title decision-title">Should I join this board?</h3>
-            <p id="decision2Desc" class="font-body body-copy">Board service can create meaningful impact, but it also
-              carries governance responsibility, time commitments, and reputational considerations.</p>
-          </div>
-
-          <div class="decision-card">
-            <h3 id="decision3Title" class="card-title decision-title">Should I lead this initiative?</h3>
-            <p id="decision3Desc" class="font-body body-copy">High-visibility projects often appear exciting, but they
-              may also require significant energy, focus, and political navigation.</p>
-          </div>
-
-          <div class="decision-card">
-            <h3 id="decision4Title" class="card-title decision-title">Should I say yes to this opportunity?</h3>
-            <p id="decision4Desc" class="font-body body-copy">Not every opportunity moves the mission forward.
-              Thoughtful leaders evaluate whether new commitments truly deserve their time and attention.</p>
-          </div>
-        </div>
-
-        <div class="section-center-link text-center">
-          <a id="decisionsCta" href="#framework" class="font-heading cta-link">Explore the Framework in Practice →</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="about" class="content-section">
-      <div class="container-shell">
-        <h2 id="aboutTitle" class="font-heading section-heading about-title text-center">Why Leadership is Stewardship
-        </h2>
-
-        <div class="about-grid grid">
-          <div class="about-image-placeholder">PORTRAIT PLACEHOLDER</div>
-
-          <div class="about-copy-stack">
-            <p id="aboutIntro" class="font-body body-copy about-strong">Leadership conversations often focus on
-              influence, authority, or visibility.</p>
-
-            <p id="aboutBody" class="font-body body-copy">
-              But influence carries responsibility.<br><br>
-              The idea behind this platform is simple: leadership is stewardship.<br><br>
-              Thoughtful leaders recognize that commitments, decisions, and opportunities all carry consequences —
-              for themselves, their teams, and the organizations they serve.<br><br>
-              Rather than asking how much influence they can accumulate, they ask a different question:<br><br>
-              <span class="inline-emphasis">How should influence be stewarded?</span><br><br>
-              This site explores that question through essays, reflections, and the development of the STEWARD
-              Framework — a decision discipline for evaluating responsibilities before accepting them.
-            </p>
-
-            <p id="aboutClosing" class="font-body body-copy about-strong">
-              The goal is not louder leadership.<br><br>
-              It is more deliberate leadership.
-            </p>
-
-            <div class="about-cta-wrap">
-              <a id="aboutCta" href="#" class="font-heading cta-link">Learn more about Ola →</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="content-section">
-      <div class="conversation-shell">
-        <h2 id="conversationsTitle" class="font-heading section-heading conversations-title text-center">Leadership
-          Conversations</h2>
-
-        <div class="conversation-copy">
-          <p id="conversationsIntro" class="font-body body-copy about-strong">The most important leadership ideas are
-            rarely developed alone.</p>
-          <p id="conversationsBody" class="font-body body-copy">They emerge through conversations, questions,
-            disagreements, and thoughtful reflection.</p>
-          <p class="font-body body-copy">This platform will continue to grow into a space for leadership dialogue —
-            exploring the practice of responsible influence and sustainable success.</p>
-          <p id="conversationsFuture" class="font-body body-copy">Future conversations may include essays, leadership
-            salons, small gatherings, retreats, and speaking engagements focused on the stewardship of leadership.</p>
-        </div>
-
-        <div class="conversation-tags flex flex-wrap justify-center gap-4">
-          <span id="theme1" class="conversation-theme">Essays</span>
-          <span id="theme2" class="conversation-theme">Leadership Salons</span>
-          <span id="theme3" class="conversation-theme">Retreat Conversations</span>
-          <span id="theme4" class="conversation-theme">Speaking</span>
-          <span id="theme5" class="conversation-theme">Leadership Dialogue</span>
-        </div>
-      </div>
-    </section>
-
-    <div class="subtle-divider-wrap">
-      <div class="subtle-divider-line"></div>
-    </div>
-
-    <section id="newsletter" class="content-section">
-      <div class="newsletter-shell">
-        <div class="newsletter-top-rule-wrap flex items-center justify-center">
-          <div class="newsletter-top-rule"></div>
-        </div>
-
-        <h2 id="newsletterTitle" class="font-heading section-heading newsletter-title text-center">Stay in the
-          Conversation</h2>
-
-        <div class="newsletter-copy text-center">
-          <p id="newsletterIntro1" class="font-body body-copy about-strong">Occasional reflections on leadership,
-            responsibility, influence, and the discipline of sustainable success.</p>
-          <p id="newsletterIntro2" class="font-body body-copy">Thoughtful notes for leaders who are interested in the
-            practice of stewardship.</p>
-        </div>
-
-        <form id="newsletterForm" class="newsletter-form">
-          <div class="newsletter-field-wrap">
-            <label for="emailInput" id="emailLabel" class="font-heading newsletter-label">Email address</label>
-            <input type="email" id="emailInput" placeholder="your@email.com" required>
-          </div>
-          <button type="submit" id="newsletterBtn" class="btn-primary newsletter-btn">Subscribe</button>
-        </form>
-
-        <p id="newsletterReassurance" class="font-body newsletter-reassurance">Thoughtful notes. No noise.</p>
-
-        <div id="successMessage" class="message-box success-message" style="display: none;">
-          <p class="font-body">Thank you. You're now in the conversation.</p>
-        </div>
-
-        <div id="errorMessage" class="message-box error-message" style="display: none;">
-          <p class="font-body" id="errorText">Please enter a valid email.</p>
-        </div>
-      </div>
-    </section>
 
     <footer class="site-footer">
       <div class="container-shell">
         <div class="footer-grid grid">
           <div class="footer-brand-col">
             <div>
-              <h3 id="footerBrandName" class="font-heading footer-brand-name">Ola Kelly</h3>
-              <p id="footerTagline" class="font-body footer-tagline">Leadership is stewardship.</p>
+              <h3 class="font-heading footer-brand-name">Ola Kelly</h3>
+              <p class="font-body footer-tagline">Stewardship over status.</p>
             </div>
-            <p id="footerDescription" class="font-body footer-description">
-              Thoughtful leadership ideas exploring the stewardship of influence, responsibility, and decision-making.
+            <p class="font-body footer-description">
+              Practical ideas on influence, responsibility, and what leadership actually requires.
             </p>
           </div>
 
           <div class="footer-link-col">
-            <h4 class="footer-col-title">Navigation</h4>
+            <h4 class="footer-col-title">Explore</h4>
             <nav class="footer-nav" aria-label="Footer navigation">
               <a href="#home" class="footer-link">Home</a>
               <a href="#ideas" class="footer-link">Ideas</a>
-              <a href="#framework" class="footer-link">STEWARD Framework</a>
+              <a href="#framework" class="footer-link">STEWARD Framework<sup>&trade;</sup></a>
               <a href="#about" class="footer-link">About</a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn</a>
             </nav>
           </div>
 
           <div class="footer-link-col">
-            <h4 class="footer-col-title">Legal</h4>
+            <h4 class="footer-col-title">The details</h4>
             <nav class="footer-nav" aria-label="Legal links">
               <a href="#" class="footer-link">Privacy Policy</a>
               <a href="#" class="footer-link">Terms of Use</a>
               <a href="#" class="footer-link">Disclaimer</a>
-              <a href="#" class="footer-link">Cookie Policy</a>
             </nav>
           </div>
         </div>
 
-        <div class="footer-divider"></div>
-
-        <div class="footer-bottom text-center">
-          <p class="font-body footer-copyright">© 2026 Ola Kelly. All rights reserved.</p>
+        <div class="footer-bottom">
+          <p class="font-body footer-copyright">&copy; 2026 Ola Kelly. All rights reserved.</p>
         </div>
       </div>
     </footer>
   </div>
 
-  <script src="scripts/main.js"></script>
+  <script src="scripts/main.js?v=20260316w"></script>
 </body>
-
 </html>
