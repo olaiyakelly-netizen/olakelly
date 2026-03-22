@@ -1337,6 +1337,28 @@ input:focus-visible,
   line-height: 1.24;
 }
 
+.framework-overview-letter {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-gold);
+  font-family: "Allura", cursive;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.framework-overview-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.framework-overview-row-bottom {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 75%;
+  margin: 0 auto;
+  gap: 32px 28px;
+}
+
 .decision-card .body-copy {
   margin: 0;
   font-size: 0.98rem;
@@ -1426,6 +1448,19 @@ input:focus-visible,
   padding-left: 18px;
   color: var(--color-cosmic-void);
   font-weight: 500;
+}
+
+.reflection-question {
+  margin-top: 0.85rem;
+  font-style: italic;
+  opacity: 0.95;
+}
+
+.reflection-question::before {
+  content: "\2192";
+  color: var(--color-gold);
+  display: inline-block;
+  margin-right: 0.5rem;
 }
 
 .about-page-list .body-copy {
@@ -2075,6 +2110,12 @@ html.dark-mode .framework-step-button.is-active {
   .decision-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .framework-overview-grid,
+  .framework-overview-row-bottom {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: none;
+  }
 }
 
 @media (max-width: 768px) {
@@ -2192,6 +2233,11 @@ html.dark-mode .framework-step-button.is-active {
   .decision-grid,
   .footer-grid,
   .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .framework-overview-grid,
+  .framework-overview-row-bottom {
     grid-template-columns: 1fr;
   }
 

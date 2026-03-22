@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full dark-mode">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The STEWARD Framework&trade; | Ola Kelly</title>
+
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Lato:wght@300;400;700&family=Playfair+Display:wght@600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+
+  <link rel="stylesheet" href="styles/main.css?v=20260316u">
+</head>
+<body class="h-full dark-mode">
+  <div id="app-wrapper" class="w-full h-full overflow-auto">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <header class="site-header" id="siteHeader">
+      <div class="container-shell">
+        <nav class="header-nav flex items-center justify-between" aria-label="Main navigation">
+          <a href="index.html#home" id="wordmark" class="font-heading wordmark">Ola Kelly</a>
+
+          <div class="hidden md:flex items-center desktop-nav">
+            <a href="index.html#home" class="nav-link nav-link-text">Home</a>
+            <a href="index.html#ideas" class="nav-link nav-link-text">Ideas</a>
+            <a href="steward-framework.html" class="nav-link nav-link-text is-current" aria-current="page">STEWARD Framework<sup>&trade;</sup></a>
+            <a href="about.html" class="nav-link nav-link-text">About</a>
+            <span class="nav-divider"></span>
+            <button id="themeToggle" class="theme-toggle dark" aria-label="Toggle dark mode">
+              <i data-lucide="sun" class="sun-icon"></i>
+              <i data-lucide="moon" class="moon-icon"></i>
+            </button>
+            <a href="index.html#newsletter" id="headerCta" class="header-cta-link">Subscribe</a>
+          </div>
+
+          <button id="mobileMenuBtn" class="mobile-menu-btn md:hidden" aria-label="Open menu">
+            <i data-lucide="menu"></i>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+
+    <aside class="mobile-nav-panel" id="mobilePanel" aria-label="Mobile navigation">
+      <div class="mobile-panel-inner">
+        <div class="flex items-center justify-between mobile-panel-top">
+          <span class="font-heading mobile-panel-brand">Ola Kelly</span>
+          <button id="mobileCloseBtn" class="mobile-close-btn" aria-label="Close menu">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="flex flex-col mobile-panel-links">
+          <a href="index.html#home" class="font-heading mobile-nav-link-text">Home</a>
+          <a href="index.html#ideas" class="font-heading mobile-nav-link-text">Ideas</a>
+          <a href="steward-framework.html" class="font-heading mobile-nav-link-text" aria-current="page">STEWARD Framework<sup>&trade;</sup></a>
+          <a href="about.html" class="font-heading mobile-nav-link-text">About</a>
+
+          <hr class="mobile-panel-rule">
+
+          <div class="mobile-panel-bottom">
+            <a href="index.html#newsletter" id="mobileCta" class="font-heading mobile-cta-link">Subscribe</a>
+            <button id="mobileThemeToggle" class="theme-toggle dark" aria-label="Toggle dark mode">
+              <i data-lucide="sun" class="sun-icon"></i>
+              <i data-lucide="moon" class="moon-icon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main id="main-content" class="about-page-main">
+      <section class="about-page-hero">
+        <div class="container-shell">
+          <div class="about-page-hero-inner">
+            <p class="font-heading eyebrow-text">Framework</p>
+            <h1 class="font-heading about-page-title">The STEWARD Framework<sup>&trade;</sup></h1>
+            <p class="font-body about-page-subhead">A decision discipline for evaluating responsibility before accepting new commitments&mdash;so leadership decisions are made with clarity, not impulse.</p>
+            <p class="font-body about-page-supporting">It offers a clear way to slow a decision down, examine what it will require, and choose with greater clarity before the cost becomes harder to carry.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <div class="container-shell">
+          <div class="section-center-intro">
+            <p class="font-heading framework-question">Before I say yes, have I stewarded this decision?</p>
+            <p class="font-body body-copy">This question activates the framework. It is not meant to function as a checklist to complete once and move past, but as a cycle that helps leaders return to the decision from several angles. Its purpose is to evaluate commitments deliberately rather than reactively.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="framework" class="framework-section">
+        <div class="container-shell">
+          <div class="framework-shell">
+            <div class="framework-visual-column">
+              <div id="frameworkDiagram" class="framework-diagram" aria-label="The STEWARD Framework interactive decision cycle">
+                <svg class="framework-diagram-svg" viewBox="0 0 900 900" role="img" aria-hidden="true">
+                  <defs>
+                    <filter id="frameworkCenterGlow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#000000" flood-opacity="0.28"></feDropShadow>
+                    </filter>
+                    <marker id="frameworkDirectionArrowhead" markerWidth="8" markerHeight="8" refX="6.5" refY="3.5" orient="auto">
+                      <path d="M 0 0 L 7 3.5 L 0 7 z" fill="#d4af37" opacity="0.92"></path>
+                    </marker>
+                  </defs>
+                  <circle class="framework-ring" cx="450" cy="450" r="312"></circle>
+                  <circle class="framework-flow-ring" cx="450" cy="450" r="252"></circle>
+                  <g id="frameworkDirectionMarkers"></g>
+                  <circle class="framework-center-disc" cx="450" cy="450" r="142"></circle>
+                  <text x="450" y="428" text-anchor="middle" class="framework-center-word">STEWARD</text>
+                  <text x="450" y="462" text-anchor="middle" class="framework-center-subtitle">Framework&trade;</text>
+                  <text x="450" y="487" text-anchor="middle" class="framework-center-caption">Leadership Stewardship Cycle</text>
+                </svg>
+                <div id="frameworkNodes" class="framework-node-layer"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="framework-header">
+            <h2 class="font-heading framework-title">Framework Overview</h2>
+            <p class="font-body framework-intro">The STEWARD Framework moves from definition to discernment. Each pillar clarifies a different dimension of responsibility so the final decision is shaped by judgment, not momentum.</p>
+          </div>
+
+          <div class="decision-grid grid framework-overview-grid">
+            <div class="decision-card">
+              <span class="decision-marker" aria-hidden="true"></span>
+              <span class="framework-overview-letter" aria-hidden="true">S</span>
+              <h3 class="card-title decision-title">Scope the Responsibility</h3>
+              <p class="font-body body-copy">Define what the responsibility actually requires before agreeing.</p>
+            </div>
+
+            <div class="decision-card">
+              <span class="decision-marker" aria-hidden="true"></span>
+              <span class="framework-overview-letter" aria-hidden="true">T</span>
+              <h3 class="card-title decision-title">Trade-Off Analysis</h3>
+              <p class="font-body body-copy">Name what the commitment will displace.</p>
+            </div>
+
+            <div class="decision-card">
+              <span class="decision-marker" aria-hidden="true"></span>
+              <span class="framework-overview-letter" aria-hidden="true">E</span>
+              <h3 class="card-title decision-title">Energy Audit</h3>
+              <p class="font-body body-copy">Assess physical, emotional, and cognitive capacity.</p>
+            </div>
+
+            <div class="decision-card">
+              <span class="decision-marker" aria-hidden="true"></span>
+              <span class="framework-overview-letter" aria-hidden="true">W</span>
+              <h3 class="card-title decision-title">Weighted Priorities</h3>
+              <p class="font-body body-copy">Determine whether the commitment moves the mission forward.</p>
+            </div>
+
+            <div class="framework-overview-row-bottom">
+              <div class="decision-card">
+                <span class="decision-marker" aria-hidden="true"></span>
+                <span class="framework-overview-letter" aria-hidden="true">A</span>
+                <h3 class="card-title decision-title">Alignment Check</h3>
+                <p class="font-body body-copy">Ensure the responsibility aligns with role, season, and long-term trajectory.</p>
+              </div>
+
+              <div class="decision-card">
+                <span class="decision-marker" aria-hidden="true"></span>
+                <span class="framework-overview-letter" aria-hidden="true">R</span>
+                <h3 class="card-title decision-title">Risk Anticipation</h3>
+                <p class="font-body body-copy">Anticipate possible consequences, strain, and overextension.</p>
+              </div>
+
+              <div class="decision-card">
+                <span class="decision-marker" aria-hidden="true"></span>
+                <span class="framework-overview-letter" aria-hidden="true">D</span>
+                <h3 class="card-title decision-title">Deliberate Boundaries</h3>
+                <p class="font-body body-copy">Define expectations, structure, and limits before beginning.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-page-section">
+        <div class="container-shell">
+          <div class="about-page-content">
+            <section class="about-page-block">
+              <h2 class="font-heading about-page-heading">S &mdash; Scope the Responsibility</h2>
+              <p class="font-body body-copy">The first task is definition. Before agreeing, clarify what the responsibility actually includes, what success would require, what authority comes with it, and what invisible labor may be hiding behind the invitation.</p>
+              <p class="font-body body-copy"><strong>Why it matters:</strong> Undefined responsibility is often where overcommitment begins. If the shape of the work is unclear, the cost of carrying it will be unclear too.</p>
+              <div class="about-page-question-set">
+                <p class="font-body body-copy reflection-question">What am I actually being asked to carry if I say yes?</p>
+              </div>
+            </section>
+
+            <section class="about-page-block">
+              <h2 class="font-heading about-page-heading">T &mdash; Trade-Off Analysis</h2>
+              <p class="font-body body-copy">Every commitment displaces something. This step names what will lose time, energy, attention, or flexibility if the new responsibility is accepted.</p>
+              <p class="font-body body-copy"><strong>Why it matters:</strong> A decision can look attractive in isolation while quietly eroding the work, rest, or relationships that already require stewardship.</p>
+              <div class="about-page-question-set">
+                <p class="font-body body-copy reflection-question">If I accept this, what will receive less of me as a result?</p>
+              </div>
+            </section>
+
+            <section class="about-page-block">
+              <h2 class="font-heading about-page-heading">E &mdash; Energy Audit</h2>
+              <p class="font-body body-copy">This pillar asks for an honest assessment of physical, emotional, and cognitive capacity. A decision may be good in principle and still unwise in the current season.</p>
+              <p class="font-body body-copy"><strong>Why it matters:</strong> Leadership failures are not always failures of character or capability. Sometimes they begin with borrowed energy and ignored fatigue.</p>
+              <div class="about-page-question-set">
+                <p class="font-body body-copy reflection-question">Do I have the capacity to carry this well, not just to begin it enthusiastically?</p>
+              </div>
+            </section>
+
+            <section class="about-page-block">
+              <h2 class="font-heading about-page-heading">W &mdash; Weighted Priorities</h2>
+              <p class="font-body body-copy">Not every worthy opportunity deserves equal weight. This step evaluates whether the commitment advances the mission, strengthens the core work, or merely competes with what matters most.</p>
+              <p class="font-body body-copy"><strong>Why it matters:</strong> Without weighting priorities, urgent requests can crowd out meaningful ones and visible work can outrank faithful work.</p>
+              <div class="about-page-question-set">
+                <p class="font-body body-copy reflection-question">Does this meaningfully move the mission forward, or simply add more motion?</p>
+              </div>
+            </section>
+
+            <section class="about-page-block">
+              <h2 class="font-heading about-page-heading">A &mdash; Alignment Check</h2>
+              <p class="font-body body-copy">Alignment asks whether the responsibility fits the role you hold, the season you are in, and the longer trajectory you are trying to steward. Good work can still be misaligned work.</p>
+              <p class="font-body body-copy"><strong>Why it matters:</strong> Misalignment creates friction that is easy to dismiss at first and expensive to ignore over time.</p>
+              <div class="about-page-question-set">
+                <p class="font-body body-copy reflection-question">Is this assignment consistent with what I am called, positioned, and prepared to carry right now?</p>
+              </div>
+            </section>
+
+            <section class="about-page-block">
+              <h2 class="font-heading about-page-heading">R &mdash; Risk Anticipation</h2>
+              <p class="font-body body-copy">This pillar looks ahead. It asks what consequences, strain points, relational pressures, or operational risks may emerge if the commitment becomes heavier than expected.</p>
+              <p class="font-body body-copy"><strong>Why it matters:</strong> Stewardship is not pessimism. It is the discipline of thinking beyond first impressions so responsibility can be carried with foresight.</p>
+              <div class="about-page-question-set">
+                <p class="font-body body-copy reflection-question">What pressure, consequence, or overextension am I likely to face if this becomes more demanding than it appears?</p>
+              </div>
+            </section>
+
+            <section class="about-page-block">
+              <h2 class="font-heading about-page-heading">D &mdash; Deliberate Boundaries</h2>
+              <p class="font-body body-copy">Before beginning, define expectations, structure, decision rights, and limits. Boundaries clarify what you are responsible for, how you will work, and what conditions allow the commitment to remain sustainable.</p>
+              <p class="font-body body-copy"><strong>Why it matters:</strong> Without boundaries, a role often expands until it consumes more than was ever intended.</p>
+              <div class="about-page-question-set">
+                <p class="font-body body-copy reflection-question">What needs to be defined now so this responsibility can be carried with integrity later?</p>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section practice-section">
+        <div class="container-shell">
+          <div class="section-center-intro">
+            <h2 class="font-heading section-heading">How to Use the STEWARD Framework</h2>
+            <p class="font-body body-copy">Most overcommitment doesn&rsquo;t come from bad intent&mdash;it comes from decisions that were never fully evaluated. The framework is most useful when a decision feels important enough to deserve more than instinct. It can be applied before:</p>
+          </div>
+
+          <div class="decision-grid grid">
+            <div class="decision-card">
+              <span class="decision-marker" aria-hidden="true"></span>
+              <h3 class="card-title decision-title">A New Opportunity</h3>
+              <p class="font-body body-copy">Use the cycle before accepting work that appears promising, strategic, or affirming.</p>
+            </div>
+
+            <div class="decision-card">
+              <span class="decision-marker" aria-hidden="true"></span>
+              <h3 class="card-title decision-title">Additional Leadership Responsibility</h3>
+              <p class="font-body body-copy">Use it before taking on a role, initiative, board seat, or assignment that will increase what you carry.</p>
+            </div>
+
+            <div class="decision-card">
+              <span class="decision-marker" aria-hidden="true"></span>
+              <h3 class="card-title decision-title">Reactive Yeses</h3>
+              <p class="font-body body-copy">Use it when urgency, guilt, ego, or visibility makes a quick yes feel easier than a thoughtful one.</p>
+            </div>
+
+            <div class="decision-card">
+              <span class="decision-marker" aria-hidden="true"></span>
+              <h3 class="card-title decision-title">Capacity Mismatch</h3>
+              <p class="font-body body-copy">Use it before agreeing to work that may not fit your current capacity, focus, or direction.</p>
+            </div>
+          </div>
+
+          <div class="section-center-intro" style="margin-top: 58px;">
+            <p class="font-body body-copy">Stewardship is not about saying no to everything. It is about saying yes with clarity.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-page-section">
+        <div class="container-shell">
+          <div class="about-page-content">
+            <section class="about-page-block about-page-closing">
+              <h2 class="font-heading about-page-heading">Carry What Is Yours to Carry</h2>
+              <p class="font-body body-copy">Leadership becomes steadier when responsibility is examined before it is assumed. The goal is not hesitation for its own sake, but a more deliberate practice of saying yes only where clarity, capacity, and calling can hold.</p>
+              <p class="font-body body-copy">This framework is one part of a larger conviction: influence should be carried as stewardship, not accumulated as status. More writing will continue to explore what that requires in practice.</p>
+              <div class="about-page-actions">
+                <a href="index.html#ideas" class="btn-primary">Read the Ideas</a>
+                <a href="index.html#home" class="btn-secondary">Return Home</a>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container-shell">
+        <div class="footer-grid grid">
+          <div class="footer-brand-col">
+            <div>
+              <h3 class="font-heading footer-brand-name">Ola Kelly</h3>
+              <p class="font-body footer-tagline">Stewardship over status.</p>
+            </div>
+            <p class="font-body footer-description">
+              Practical ideas on influence, responsibility, and what leadership actually requires.
+            </p>
+          </div>
+
+          <div class="footer-link-col">
+            <h4 class="footer-col-title">Explore</h4>
+            <nav class="footer-nav" aria-label="Footer navigation">
+              <a href="index.html#home" class="footer-link">Home</a>
+              <a href="index.html#ideas" class="footer-link">Ideas</a>
+              <a href="steward-framework.html" class="footer-link">STEWARD Framework<sup>&trade;</sup></a>
+              <a href="about.html" class="footer-link">About</a>
+            </nav>
+          </div>
+
+          <div class="footer-link-col">
+            <h4 class="footer-col-title">The details</h4>
+            <nav class="footer-nav" aria-label="Legal links">
+              <a href="privacy-policy.html" class="footer-link">Privacy Policy</a>
+              <a href="terms.html" class="footer-link">Terms of Use</a>
+              <a href="disclaimer.html" class="footer-link">Disclaimer</a>
+            </nav>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p class="font-body footer-copyright">&copy; 2026 Ola Kelly. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="scripts/main.js?v=20260316w"></script>
+</body>
+</html>
