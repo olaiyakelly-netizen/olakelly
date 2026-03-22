@@ -47,9 +47,9 @@ This project uses Vercel's built-in Git integration.
 
 ### Branch workflow
 
-- `main` is the production branch
-- Any non-`main` branch deploys automatically as a Vercel Preview
-- Merging into `main` triggers a Production deployment
+- `staging` is the deployment branch
+- Pushes to `staging` are the branch used for live deployment going forward
+- Other branches can still be used for working changes and review before merging into `staging`
 
 ### Recommended branch naming
 
@@ -66,23 +66,23 @@ Examples:
 
 ### Typical flow
 
-`Local -> Branch -> Preview -> Merge -> Production`
+`Local -> Branch -> Review -> Merge -> Deploy from staging`
 
-1. Start from `main`
+1. Start from `staging`
 2. Create a branch
 3. Push the branch to GitHub
-4. Vercel generates a Preview deployment URL
+4. Review the branch changes
    - Available in the Vercel dashboard under "Deployments"
    - Also appears in the GitHub pull request checks
-5. Open a pull request into `main`
+5. Open a pull request into `staging`
 6. Merge when ready
-7. Vercel deploys to Production automatically
+7. Vercel deploys from `staging`
 
 ### Example commands
 
 ```bash
-git checkout main
-git pull origin main
+git checkout staging
+git pull origin staging
 git checkout -b feature/about-page-update
 
 git add .
@@ -90,27 +90,15 @@ git commit -m "Refine About page copy"
 git push -u origin feature/about-page-update
 ```
 
-### Preview deployments
-
-Every push to a non-`main` branch creates a unique Preview URL in Vercel.
-
-You can view it in:
-- GitHub pull request checks/comments
-- Vercel dashboard -> Project -> Deployments
-
-### Production deployments
-
-Any merge or push to `main` creates a Production deployment automatically.
-
 ### Important
 
-Do not make changes directly on the `main` branch.
+Do not make deployment changes directly on the `main` branch.
 
-Always use a feature/content/design branch so changes can be reviewed in a Preview deployment before going live.
+Use a feature/content/design branch when you want review before merging into `staging`.
 
 ### Stewardship Principle
 
-Before merging to `main`, confirm:
+Before merging to `staging`, confirm:
 - The change is complete enough to publish
 - It aligns with the purpose of the site
 - It does not introduce unnecessary complexity
