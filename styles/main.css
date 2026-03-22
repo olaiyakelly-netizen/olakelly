@@ -519,6 +519,10 @@ body {
   line-height: 1.55;
 }
 
+.steward-framework-hero .trigger-cta-block {
+  margin-top: 40px;
+}
+
 .section-heading {
   margin: 0 0 24px;
   color: var(--color-cosmic-void);
