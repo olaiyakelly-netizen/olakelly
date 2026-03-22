@@ -713,8 +713,8 @@ body {
 
 .framework-flow-ring {
   fill: none;
-  stroke: rgba(212, 175, 55, 0.74);
-  stroke-width: 2;
+  stroke: none;
+  stroke-width: 0;
   opacity: 0;
   stroke-dasharray: 1585;
   stroke-dashoffset: 1585;
@@ -722,8 +722,8 @@ body {
 
 .framework-direction-marker {
   fill: none;
-  stroke: rgba(212, 175, 55, 0.74);
-  stroke-width: 1.9;
+  stroke: none;
+  stroke-width: 0;
   stroke-linecap: round;
   opacity: 0;
   transform-origin: 450px 450px;
