@@ -40,3 +40,79 @@ or:
 ```powershell
 py -m http.server 8000
 ```
+
+## Deployment workflow
+
+This project uses Vercel's built-in Git integration.
+
+### Branch workflow
+
+- `main` is the production branch
+- Any non-`main` branch deploys automatically as a Vercel Preview
+- Merging into `main` triggers a Production deployment
+
+### Recommended branch naming
+
+- `feature/...` for new features
+- `fix/...` for bug fixes
+- `content/...` for copy/content changes
+- `design/...` for visual refinements
+
+Examples:
+- `feature/about-page`
+- `fix/footer-spacing`
+- `content/privacy-copy`
+- `design/favicon-update`
+
+### Typical flow
+
+`Local -> Branch -> Preview -> Merge -> Production`
+
+1. Start from `main`
+2. Create a branch
+3. Push the branch to GitHub
+4. Vercel generates a Preview deployment URL
+   - Available in the Vercel dashboard under "Deployments"
+   - Also appears in the GitHub pull request checks
+5. Open a pull request into `main`
+6. Merge when ready
+7. Vercel deploys to Production automatically
+
+### Example commands
+
+```bash
+git checkout main
+git pull origin main
+git checkout -b feature/about-page-update
+
+git add .
+git commit -m "Refine About page copy"
+git push -u origin feature/about-page-update
+```
+
+### Preview deployments
+
+Every push to a non-`main` branch creates a unique Preview URL in Vercel.
+
+You can view it in:
+- GitHub pull request checks/comments
+- Vercel dashboard -> Project -> Deployments
+
+### Production deployments
+
+Any merge or push to `main` creates a Production deployment automatically.
+
+### Important
+
+Do not make changes directly on the `main` branch.
+
+Always use a feature/content/design branch so changes can be reviewed in a Preview deployment before going live.
+
+### Stewardship Principle
+
+Before merging to `main`, confirm:
+- The change is complete enough to publish
+- It aligns with the purpose of the site
+- It does not introduce unnecessary complexity
+
+Preview before you publish.
