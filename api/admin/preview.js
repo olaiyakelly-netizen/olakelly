@@ -1,23 +1,28 @@
 "use strict";
 
-const { readJsonBody, renderPreviewHtml, requireSession, sendJson } = require("./_lib");
+const { z } = require("zod");
+const { renderPreviewHtml } = require("./_lib");
+const { getSession } = require("../../lib/admin-auth");
+const { secureAction } = require("../../lib/security");
+
+const schema = z.object({}).passthrough();
 
 module.exports = async function handler(req, res) {
-  if (req.method !== "POST") {
-    return sendJson(res, 405, { error: "Method not allowed." });
-  }
-  if (!requireSession(req, res)) return;
-
-  try {
-    const body = await readJsonBody(req);
+  return secureAction(req, res, {
+    method: "POST",
+    schema,
+    getSession,
+    rateLimit: "preview",
+    flag: "ADMIN_ENABLED",
+    auditType: "admin.preview",
+    handler: async ({ body }) => {
     const preview = renderPreviewHtml(body);
-    return sendJson(res, 200, {
+    return {
       html: preview.html,
       slug: preview.post.slug,
       reading_time: preview.post.reading_time,
       word_count: preview.post.word_count
-    });
-  } catch (error) {
-    return sendJson(res, 400, { error: error.message || "Preview failed." });
-  }
+    };
+    }
+  });
 };

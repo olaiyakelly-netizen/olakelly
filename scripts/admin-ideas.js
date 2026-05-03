@@ -4,12 +4,29 @@
   }
 
   const loginForm = document.getElementById("adminLoginForm");
+  const passkeyLoginBtn = document.getElementById("adminPasskeyLoginBtn");
   const loginPanel = document.getElementById("adminLoginPanel");
   const loginMessage = document.getElementById("adminLoginMessage");
   const editorShell = document.getElementById("adminEditorShell");
   const editorForm = document.getElementById("ideasAdminForm");
   const editorMessage = document.getElementById("adminEditorMessage");
   const deployStatusMessage = document.getElementById("adminDeployStatus");
+  const draftStateIndicator = document.getElementById("draftStateIndicator");
+  const publishPreviewState = document.getElementById("publishPreviewState");
+  const publishPreviewBranch = document.getElementById("publishPreviewBranch");
+  const publishPreviewCommit = document.getElementById("publishPreviewCommit");
+  const publishPreviewChecked = document.getElementById("publishPreviewChecked");
+  const publishPreviewElapsedWrap = document.getElementById("publishPreviewElapsedWrap");
+  const publishPreviewElapsed = document.getElementById("publishPreviewElapsed");
+  const publishPreviewPrLink = document.getElementById("publishPreviewPrLink");
+  const publishPreviewOpenLink = document.getElementById("publishPreviewOpenLink");
+  const publishPreviewPlaceholder = document.getElementById("publishPreviewPlaceholder");
+  const publishPreviewFrame = document.getElementById("publishPreviewFrame");
+  const securityEventsPanel = document.getElementById("adminSecurityEvents");
+  const stepUpModal = document.getElementById("adminStepUpModal");
+  const stepUpConfirmBtn = document.getElementById("adminStepUpConfirmBtn");
+  const stepUpCancelBtn = document.getElementById("adminStepUpCancelBtn");
+  const stepUpMessage = document.getElementById("adminStepUpMessage");
   const previewButton = document.getElementById("previewPostBtn");
   const logoutButton = document.getElementById("adminLogoutBtn");
   const previewFrame = document.getElementById("previewFrame");
@@ -57,6 +74,14 @@
   let editingExisting = false;
   let loadedPostWasPublished = false;
   let slugUnlockedForSession = false;
+  let csrfToken = "";
+  let nextNonce = "";
+  let publishPreviewPollTimer = null;
+  let publishPreviewStartedAt = null;
+  let publishPreviewBranchValue = "";
+  let lastPublishedPayloadHash = "";
+  let pendingStepUpResolve = null;
+  let pendingStepUpContext = null;
 
   function slugify(value) {
     return String(value || "")
@@ -538,6 +563,125 @@
     }
   }
 
+  function setPublishPreviewState(state, details = {}) {
+    if (publishPreviewState) publishPreviewState.textContent = state || "Not published";
+    if (publishPreviewBranch) publishPreviewBranch.textContent = details.branch || publishPreviewBranch.textContent || "-";
+    if (publishPreviewCommit) publishPreviewCommit.textContent = details.commit_sha ? details.commit_sha.slice(0, 7) : (publishPreviewCommit.textContent || "-");
+    if (publishPreviewChecked) publishPreviewChecked.textContent = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    if (details.pr_url && publishPreviewPrLink) {
+      publishPreviewPrLink.href = details.pr_url;
+      publishPreviewPrLink.classList.remove("is-hidden");
+    }
+    if (details.preview_url && publishPreviewOpenLink) {
+      publishPreviewOpenLink.href = details.preview_url;
+      publishPreviewOpenLink.classList.remove("is-hidden");
+    }
+    if (details.show_elapsed && publishPreviewElapsedWrap && publishPreviewElapsed) {
+      publishPreviewElapsedWrap.classList.remove("is-hidden");
+      publishPreviewElapsed.textContent = `${Math.floor((details.elapsed_ms || 0) / 1000)}s`;
+    }
+  }
+
+  function stopPublishPreviewPolling() {
+    if (publishPreviewPollTimer) {
+      window.clearTimeout(publishPreviewPollTimer);
+      publishPreviewPollTimer = null;
+    }
+  }
+
+  function showPublishPreviewBlocked(url) {
+    setPublishPreviewState("Blocked", { preview_url: url });
+    publishPreviewFrame?.classList.add("is-hidden");
+    publishPreviewPlaceholder?.classList.remove("is-hidden");
+    if (publishPreviewPlaceholder) publishPreviewPlaceholder.textContent = "Preview cannot be embedded here. Open it in a new tab.";
+  }
+
+  function renderPublishPreviewUrl(url) {
+    if (!url || !publishPreviewFrame) return;
+    publishPreviewPlaceholder?.classList.add("is-hidden");
+    publishPreviewFrame.classList.remove("is-hidden");
+    publishPreviewFrame.src = url;
+    const blockedTimer = window.setTimeout(() => {
+      showPublishPreviewBlocked(url);
+    }, 4000);
+    publishPreviewFrame.onload = () => {
+      window.clearTimeout(blockedTimer);
+    };
+  }
+
+  async function pollPublishPreview() {
+    if (!publishPreviewBranchValue || !publishPreviewStartedAt) return;
+    try {
+      const data = await requestApi(`/api/admin/publish-preview?branch=${encodeURIComponent(publishPreviewBranchValue)}&started_at=${publishPreviewStartedAt}`, {
+        method: "GET"
+      });
+      setPublishPreviewState(data.state, {
+        branch: data.branch,
+        preview_url: data.preview_url,
+        elapsed_ms: data.elapsed_ms,
+        show_elapsed: data.show_elapsed
+      });
+      if (data.state === "Ready" && data.preview_url) {
+        renderPublishPreviewUrl(data.preview_url);
+        publishPreviewPollTimer = window.setTimeout(pollPublishPreview, 30000);
+        return;
+      }
+      if (["Failed", "Stalled"].includes(data.state)) {
+        stopPublishPreviewPolling();
+        return;
+      }
+      publishPreviewPollTimer = window.setTimeout(pollPublishPreview, 5000);
+    } catch (error) {
+      setPublishPreviewState("Failed");
+      if (publishPreviewPlaceholder) publishPreviewPlaceholder.textContent = error.message || "Preview status could not be loaded.";
+      stopPublishPreviewPolling();
+    }
+  }
+
+  function startPublishPreviewPolling(data) {
+    stopPublishPreviewPolling();
+    publishPreviewBranchValue = data.branch || "";
+    publishPreviewStartedAt = data.preview_started_at || Date.now();
+    setPublishPreviewState(data.preview_status || "Preview queued", {
+      branch: data.branch,
+      commit_sha: data.commit_sha,
+      pr_url: data.pr_url
+    });
+    if (publishPreviewPlaceholder) publishPreviewPlaceholder.textContent = "Waiting for Vercel preview...";
+    publishPreviewPollTimer = window.setTimeout(pollPublishPreview, 5000);
+  }
+
+  async function hashPayload(payload) {
+    const encoded = new TextEncoder().encode(JSON.stringify(payload || {}));
+    const digest = await crypto.subtle.digest("SHA-256", encoded);
+    return Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
+  }
+
+  async function refreshSecurityState() {
+    const data = await fetch("/api/admin/security", { credentials: "same-origin" }).then((response) => response.json());
+    csrfToken = data.csrf || csrfToken;
+    nextNonce = data.nonce || nextNonce;
+    renderSecurityEvents(Array.isArray(data.security_events) ? data.security_events : []);
+    return data;
+  }
+
+  function renderSecurityEvents(events) {
+    if (!securityEventsPanel) return;
+    if (!events.length) {
+      securityEventsPanel.innerHTML = `<p class="admin-preview-placeholder">No high-signal events in the last hour.</p>`;
+      return;
+    }
+    securityEventsPanel.innerHTML = events.slice(0, 10).map((event) => {
+      const time = new Date(event.timestamp).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+      return `<div class="admin-security-event"><span>${escapeHtml(event.type)}</span><strong>${escapeHtml(time)}</strong></div>`;
+    }).join("");
+  }
+
+  function updateDraftStateIndicator(state) {
+    if (!draftStateIndicator) return;
+    draftStateIndicator.textContent = state || "Current Draft";
+  }
+
   function getSelectedTags() {
     return Array.from(editorForm?.querySelectorAll('input[name="tags"]:checked') || [])
       .map((input) => String(input.value || "").trim())
@@ -632,15 +776,25 @@
   }
 
   async function requestApi(url, options = {}) {
+    const method = String(options.method || "GET").toUpperCase();
+    if (method !== "GET" && (!csrfToken || !nextNonce)) {
+      await refreshSecurityState();
+    }
     const response = await fetch(url, {
       credentials: "same-origin",
       ...options,
       headers: {
         "Content-Type": "application/json",
+        ...(csrfToken ? { "X-CSRF-Token": csrfToken } : {}),
+        ...(method !== "GET" && nextNonce ? { "X-Request-Nonce": nextNonce } : {}),
         ...(options.headers || {})
       }
     });
     const data = await response.json().catch(() => ({}));
+    if (method !== "GET") {
+      nextNonce = "";
+      refreshSecurityState().catch(() => {});
+    }
     if (!response.ok) {
       const error = new Error(data.error || "Request failed.");
       error.statusCode = response.status;
@@ -886,11 +1040,66 @@
   async function handleLogin(password) {
     await requestApi("/api/admin/login", {
       method: "POST",
-      body: JSON.stringify({ password })
+      body: JSON.stringify({
+        password,
+        totp: document.getElementById("adminTotp")?.value || ""
+      })
     });
     setEditorAuthenticated(true);
     await loadRecentPosts();
     refreshCleanSnapshot();
+  }
+
+  async function runPasskeyLogin() {
+    if (!window.SimpleWebAuthnBrowser?.startAuthentication) {
+      throw new Error("Passkey support did not load. Use fallback login.");
+    }
+    await refreshSecurityState();
+    const options = await requestApi("/api/admin/passkey-options", {
+      method: "POST",
+      body: JSON.stringify({ action: "login" })
+    });
+    const response = await window.SimpleWebAuthnBrowser.startAuthentication(options.options);
+    const verified = await requestApi("/api/admin/passkey-verify", {
+      method: "POST",
+      body: JSON.stringify({
+        challenge_id: options.challenge_id,
+        response,
+        context: {}
+      })
+    });
+    csrfToken = verified.csrf || csrfToken;
+    setEditorAuthenticated(true);
+    await loadRecentPosts();
+    refreshCleanSnapshot();
+  }
+
+  function openStepUpModal() {
+    return new Promise((resolve, reject) => {
+      pendingStepUpResolve = { resolve, reject };
+      stepUpMessage.textContent = "";
+      stepUpModal?.classList.remove("is-hidden");
+    });
+  }
+
+  function closeStepUpModal() {
+    stepUpModal?.classList.add("is-hidden");
+    pendingStepUpResolve = null;
+  }
+
+  async function requestPublishStepUp(payload, nonce) {
+    const payloadHash = await hashPayload(payload);
+    pendingStepUpContext = {
+      action: "publish",
+      method: "POST",
+      route: "/api/admin/publish",
+      target: payload.slug || payload.title,
+      payloadHash,
+      nonce
+    };
+    const proof = await openStepUpModal();
+    nextNonce = nonce;
+    return { proof, payloadHash };
   }
 
   async function saveDraft() {
@@ -924,12 +1133,19 @@
       }
     }
 
+    if (!nextNonce) await refreshSecurityState();
+    const stepUp = await requestPublishStepUp(payload, nextNonce);
     const data = await requestApi("/api/admin/publish", {
       method: "POST",
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        ...payload,
+        step_up_proof: stepUp.proof
+      })
     });
 
     applyServerState(data, payload, "publish");
+    lastPublishedPayloadHash = data.payload_hash || lastPublishedPayloadHash;
+    updateDraftStateIndicator(data.pr_url ? "Published PR Pending" : "Last Published");
     markSavedNow(data.no_changes ? "Checked" : "Published");
     refreshCleanSnapshot();
     await loadRecentPosts();
@@ -938,16 +1154,12 @@
       data.message || "Published successfully. Vercel will deploy automatically.",
       false,
       [
-        data.commit_url ? { href: data.commit_url, label: "View Commit" } : null,
+        data.pr_url ? { href: data.pr_url, label: "Open PR" } : null,
         data.live_url ? { href: data.live_url, label: "View Live" } : null
       ]
     );
 
-    if (data.deploy_hook_triggered) {
-      startDeploymentPolling("Deploy triggered", [data.live_url ? { href: data.live_url, label: "View Live" } : null]);
-    } else if (data.deploy_hook_warning || data.deploy_hook_configured === false) {
-      setDeploymentStatus(data.deploy_hook_warning || "Deployment was not triggered explicitly.", true);
-    }
+    startPublishPreviewPolling(data);
   }
 
   loginForm?.addEventListener("submit", async (event) => {
@@ -958,6 +1170,52 @@
       setMessage(loginMessage, "");
     } catch (error) {
       setMessage(loginMessage, error.message, true);
+    }
+  });
+
+  passkeyLoginBtn?.addEventListener("click", async () => {
+    try {
+      await runPasskeyLogin();
+      setMessage(loginMessage, "");
+    } catch (error) {
+      setMessage(loginMessage, error.message, true);
+    }
+  });
+
+  stepUpCancelBtn?.addEventListener("click", () => {
+    pendingStepUpResolve?.reject(new Error("Publish confirmation was canceled."));
+    closeStepUpModal();
+  });
+
+  stepUpConfirmBtn?.addEventListener("click", async () => {
+    try {
+      if (!pendingStepUpContext) throw new Error("No publish request is waiting for confirmation.");
+      if (!window.SimpleWebAuthnBrowser?.startAuthentication) throw new Error("Passkey support did not load.");
+      stepUpMessage.textContent = "Waiting for passkey...";
+      const options = await requestApi("/api/admin/passkey-options", {
+        method: "POST",
+        body: JSON.stringify({
+          action: pendingStepUpContext.action,
+          method: pendingStepUpContext.method,
+          route: pendingStepUpContext.route,
+          target: pendingStepUpContext.target,
+          payload_hash: pendingStepUpContext.payloadHash,
+          nonce: pendingStepUpContext.nonce
+        })
+      });
+      const response = await window.SimpleWebAuthnBrowser.startAuthentication(options.options);
+      const verified = await requestApi("/api/admin/passkey-verify", {
+        method: "POST",
+        body: JSON.stringify({
+          challenge_id: options.challenge_id,
+          response,
+          context: pendingStepUpContext
+        })
+      });
+      pendingStepUpResolve?.resolve(verified.proof);
+      closeStepUpModal();
+    } catch (error) {
+      stepUpMessage.textContent = error.message || "Passkey confirmation failed.";
     }
   });
 
@@ -1040,11 +1298,13 @@
   });
 
   editorForm?.addEventListener("input", (event) => {
+    updateDraftStateIndicator("Current Draft");
     if (event.target === titleInput || event.target === slugInput) return;
     schedulePreview();
   });
 
   editorForm?.addEventListener("change", (event) => {
+    updateDraftStateIndicator("Current Draft");
     if (event.target === homepageFeaturedInput) return;
     schedulePreview();
   });
@@ -1057,6 +1317,7 @@
   });
 
   loadThemePreference();
+  refreshSecurityState().catch(() => {});
   syncEditorHeading();
   syncHomepageOrderState();
   setNewPostMode();

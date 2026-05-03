@@ -4,9 +4,15 @@ const crypto = require("crypto");
 const path = require("path");
 const matter = require("gray-matter");
 const { computePost, renderPostPage, serializeFrontMatter } = require("../../lib/blog");
+const githubApp = require("../../lib/github-app");
+const { validatePostPayload } = require("../../lib/content-policy");
+const { hashPayload } = require("../../lib/security");
+const {
+  COOKIE_NAME,
+  SESSION_TTL_SECONDS,
+  getSession
+} = require("../../lib/admin-auth");
 
-const COOKIE_NAME = "ideas_admin_session";
-const SESSION_TTL_SECONDS = 60 * 60 * 4;
 const DRAFT_SCHEMA_VERSION = 1;
 
 function sendJson(res, statusCode, payload, headers = {}) {
@@ -69,14 +75,13 @@ function parseCookies(cookieHeader) {
     }, {});
 }
 
-function requireSession(req, res) {
-  const secret = process.env.IDEAS_ADMIN_SESSION_SECRET;
-  const cookies = parseCookies(req.headers.cookie);
-  if (!verifySessionToken(cookies[COOKIE_NAME], secret)) {
+async function requireSession(req, res) {
+  const session = await getSession(req, res, { respond: false });
+  if (!session) {
     sendJson(res, 401, { error: "Unauthorized." });
     return false;
   }
-  return true;
+  return session;
 }
 
 function derivePreviewExcerpt(content) {
@@ -108,8 +113,8 @@ function buildPreviewPost(body) {
       homepage_order: body.homepage_order,
       date: body.date || new Date().toISOString(),
       updated: new Date().toISOString(),
-      category: body.category || "STEWARD Framework",
-      category_slug: body.category_slug || "steward-framework",
+      category: body.category,
+      category_slug: body.category_slug,
       tags: body.tags || [],
       excerpt: previewExcerpt,
       intent: body.intent || "",
@@ -143,16 +148,12 @@ function getBlobClient() {
 }
 
 function getGitHubConfig() {
-  const token = process.env.GITHUB_TOKEN;
-  const owner = process.env.GITHUB_REPO_OWNER;
-  const repo = process.env.GITHUB_REPO_NAME;
-  const branch = process.env.VERCEL_PRODUCTION_GIT_BRANCH;
-
-  if (!token || !owner || !repo || !branch) {
-    throw new Error("Missing GitHub publishing environment variables.");
-  }
-
-  return { token, owner, repo, branch };
+  const config = githubApp.requireConfig();
+  return {
+    owner: config.owner,
+    repo: config.repo,
+    branch: config.baseBranch
+  };
 }
 
 function createGitHubApiUrl(resourcePath) {
@@ -161,28 +162,7 @@ function createGitHubApiUrl(resourcePath) {
 }
 
 async function githubApiRequest(resourcePath, options = {}) {
-  const { token } = getGitHubConfig();
-  const response = await fetch(createGitHubApiUrl(resourcePath), {
-    method: options.method || "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/vnd.github+json",
-      "Content-Type": "application/json",
-      "User-Agent": "olakelly-ideas-admin",
-      ...(options.headers || {})
-    },
-    body: options.body ? JSON.stringify(options.body) : undefined
-  });
-
-  if (response.status === 404 && options.allowNotFound) return null;
-  if (!response.ok) {
-    const error = new Error(`GitHub request failed: ${response.status} ${await response.text()}`);
-    error.statusCode = response.status;
-    throw error;
-  }
-
-  if (response.status === 204) return null;
-  return response.json();
+  return githubApp.githubRequest(resourcePath, options);
 }
 
 async function assertGitHubBranchExists() {
@@ -197,7 +177,7 @@ async function githubContentsRequest(filePath, method = "GET", body, options = {
     ? `contents/${normalizedPath}?ref=${encodeURIComponent(branch)}`
     : `contents/${normalizedPath}`;
 
-  return githubApiRequest(resourcePath, {
+  return githubApp.githubRequest(resourcePath, {
     method,
     allowNotFound: options.allowNotFound,
     body: method === "GET" ? undefined : { branch, ...body }
@@ -205,22 +185,11 @@ async function githubContentsRequest(filePath, method = "GET", body, options = {
 }
 
 async function getGitHubFile(filePath) {
-  const response = await githubContentsRequest(filePath, "GET", undefined, { allowNotFound: true });
-  if (!response) return null;
-  return {
-    sha: response.sha,
-    content: Buffer.from(response.content || "", "base64").toString("utf8"),
-    html_url: response.html_url || null
-  };
+  return githubApp.getFile(filePath, getGitHubConfig().branch);
 }
 
 async function putGitHubFile(filePath, content, message, sha) {
-  const payload = {
-    message,
-    content: Buffer.isBuffer(content) ? content.toString("base64") : Buffer.from(String(content), "utf8").toString("base64")
-  };
-  if (sha) payload.sha = sha;
-  return githubContentsRequest(filePath, "PUT", payload);
+  return githubApp.putFile(filePath, content, message, getGitHubConfig().branch, sha);
 }
 
 async function deleteGitHubFile(filePath, message, sha) {
@@ -229,7 +198,7 @@ async function deleteGitHubFile(filePath, message, sha) {
     if (!existing) return null;
     sha = existing.sha;
   }
-  return githubContentsRequest(filePath, "DELETE", { message, sha });
+  return githubApp.deleteFile(filePath, message, getGitHubConfig().branch, sha);
 }
 
 function parseExistingSource(source) {
@@ -464,8 +433,8 @@ function buildPublishPost(body, publishedAt) {
       homepage_order: body.homepage_order,
       date: body.date || publishedAt,
       updated: publishedAt,
-      category: body.category || "STEWARD Framework",
-      category_slug: body.category_slug || "steward-framework",
+      category: body.category,
+      category_slug: body.category_slug,
       tags: body.tags || [],
       excerpt: body.excerpt,
       intent: body.intent || "",
@@ -518,10 +487,6 @@ function extractCommitInfo(result) {
   };
 }
 
-function getVercelDeployHookUrl() {
-  return String(process.env.VERCEL_DEPLOY_HOOK_URL || "").trim();
-}
-
 function getVercelApiConfig() {
   const token = String(process.env.VERCEL_API_TOKEN || "").trim();
   const projectId = String(process.env.VERCEL_PROJECT_ID || "").trim();
@@ -532,32 +497,6 @@ function getVercelApiConfig() {
   }
 
   return { token, projectId, teamId };
-}
-
-async function triggerVercelDeployHook() {
-  const hookUrl = getVercelDeployHookUrl();
-  if (!hookUrl) {
-    return {
-      deploy_hook_triggered: false,
-      deploy_hook_configured: false,
-      deploy_hook_warning: "VERCEL_DEPLOY_HOOK_URL is not configured."
-    };
-  }
-
-  const response = await fetch(hookUrl, { method: "POST" });
-  if (!response.ok) {
-    return {
-      deploy_hook_triggered: false,
-      deploy_hook_configured: true,
-      deploy_hook_warning: `Vercel deploy hook failed: ${response.status}.`
-    };
-  }
-
-  return {
-    deploy_hook_triggered: true,
-    deploy_hook_configured: true,
-    deploy_hook_warning: null
-  };
 }
 
 async function getLatestVercelDeploymentStatus() {
@@ -633,11 +572,10 @@ async function getLatestVercelDeploymentStatus() {
 }
 
 async function publishPostToGitHub(body) {
-  await assertGitHubBranchExists();
-
   const publishedAt = new Date().toISOString();
+  const validatedBody = validatePostPayload(body);
   const requestedPublishedSlug = String(body.published_slug || "").trim() || null;
-  const nextBasePost = buildPublishPost(body, publishedAt);
+  const nextBasePost = buildPublishPost(validatedBody, publishedAt);
   const commitMessage = buildPublishCommitMessage(nextBasePost);
 
   const livePath = requestedPublishedSlug ? `content/posts/${requestedPublishedSlug}.md` : null;
@@ -648,9 +586,15 @@ async function publishPostToGitHub(body) {
     throw createConflictError("Published slug changes require explicit confirmation.");
   }
 
+  let workingBranch = String(body.content_branch || "").trim();
+  workingBranch = await githubApp.ensureContentBranch({
+    slug: nextBasePost.slug,
+    existingBranch: workingBranch || null
+  });
+
   const [liveSource, targetSource] = await Promise.all([
-    livePath ? getGitHubFile(livePath) : Promise.resolve(null),
-    getGitHubFile(targetPath)
+    livePath ? githubApp.getFile(livePath, workingBranch) : Promise.resolve(null),
+    githubApp.getFile(targetPath, workingBranch)
   ]);
 
   const livePost = liveSource ? parsePostSource(liveSource.content) : null;
@@ -674,8 +618,8 @@ async function publishPostToGitHub(body) {
     const extension = extensionFromMimeType(decoded.mimeType);
     coverImagePath = `/assets/posts/${nextBasePost.slug}/cover.${extension}`;
     const assetPath = path.posix.join("assets", "posts", nextBasePost.slug, `cover.${extension}`);
-    const existingAsset = await getGitHubFile(assetPath);
-    const uploadResult = await putGitHubFile(assetPath, decoded.buffer, commitMessage, existingAsset ? existingAsset.sha : undefined);
+    const existingAsset = await githubApp.getFile(assetPath, workingBranch);
+    const uploadResult = await githubApp.putFile(assetPath, decoded.buffer, commitMessage, workingBranch, existingAsset ? existingAsset.sha : undefined);
     lastCommitInfo = extractCommitInfo(uploadResult);
     hasBinaryChanges = true;
   }
@@ -700,7 +644,6 @@ async function publishPostToGitHub(body) {
   }
 
   if (noChanges) {
-    const deployHookResult = await triggerVercelDeployHook();
     if (body.draft_id) {
       await saveDraftToBlob(body, {
         draft_id: body.draft_id,
@@ -712,22 +655,32 @@ async function publishPostToGitHub(body) {
       });
     }
 
-    const { branch } = getGitHubConfig();
+    const payloadHash = hashPayload(validatedBody);
+    const pr = await githubApp.createOrUpdatePr({
+      branch: workingBranch,
+      title: nextPost.title,
+      slug: nextPost.slug,
+      id: nextPost.id,
+      payloadHash,
+      summary: "No content changes were needed, but the PR remains the preview review surface."
+    });
     return {
       id: nextPost.id,
       slug: nextPost.slug,
       published_slug: nextPost.slug,
-      branch,
+      branch: pr.branch || workingBranch,
       commit_sha: null,
       commit_url: null,
+      pr_url: pr.html_url,
+      pr_number: pr.number,
+      payload_hash: payloadHash,
+      preview_started_at: Date.now(),
+      preview_status: "Preview queued",
       cover_image: nextPost.cover_image,
       live_url: nextPost.url,
       published_at: publishedAt,
       no_changes: true,
-      message: deployHookResult.deploy_hook_triggered
-        ? "No content changes were needed. Vercel redeploy was triggered."
-        : (deployHookResult.deploy_hook_warning || "No changes to publish. Production already matches this content."),
-      ...deployHookResult,
+      message: "No content changes were needed. Publish PR preview is still available for review.",
       reading_time: nextPost.reading_time,
       word_count: nextPost.word_count
     };
@@ -735,20 +688,20 @@ async function publishPostToGitHub(body) {
 
   for (const post of homepageUpdates) {
     const updateSource = serializeFrontMatter(post);
-    const existing = await getGitHubFile(`content/posts/${post.slug}.md`);
-    const updateResult = await putGitHubFile(`content/posts/${post.slug}.md`, updateSource, commitMessage, existing ? existing.sha : undefined);
+    const existing = await githubApp.getFile(`content/posts/${post.slug}.md`, workingBranch);
+    const updateResult = await githubApp.putFile(`content/posts/${post.slug}.md`, updateSource, commitMessage, workingBranch, existing ? existing.sha : undefined);
     lastCommitInfo = extractCommitInfo(updateResult);
   }
 
-  const targetWriteResult = await putGitHubFile(targetPath, source, commitMessage, targetSource ? targetSource.sha : undefined);
+  const targetWriteResult = await githubApp.putFile(targetPath, source, commitMessage, workingBranch, targetSource ? targetSource.sha : undefined);
   lastCommitInfo = extractCommitInfo(targetWriteResult);
 
   if (isSlugChange && requestedPublishedSlug) {
-    const redirectResult = await updateRedirectsIfNeeded(requestedPublishedSlug, nextPost.slug, commitMessage);
+    const redirectResult = await updateRedirectsIfNeededOnBranch(requestedPublishedSlug, nextPost.slug, commitMessage, workingBranch);
     if (redirectResult) lastCommitInfo = extractCommitInfo(redirectResult);
 
     if (liveSource) {
-      const deleteResult = await deleteGitHubFile(livePath, commitMessage, liveSource.sha);
+      const deleteResult = await githubApp.deleteFile(livePath, commitMessage, workingBranch, liveSource.sha);
       if (deleteResult) lastCommitInfo = extractCommitInfo(deleteResult);
     }
   }
@@ -764,25 +717,50 @@ async function publishPostToGitHub(body) {
     });
   }
 
-  const deployHookResult = await triggerVercelDeployHook();
-  const { branch } = getGitHubConfig();
+  const payloadHash = hashPayload(validatedBody);
+  const pr = await githubApp.createOrUpdatePr({
+    branch: workingBranch,
+    title: nextPost.title,
+    slug: nextPost.slug,
+    id: nextPost.id,
+    payloadHash,
+    summary: "Created from Ideas Admin. Review the Vercel preview before merging."
+  });
   return {
     id: nextPost.id,
     slug: nextPost.slug,
     published_slug: nextPost.slug,
-    branch,
+    branch: pr.branch || workingBranch,
     ...lastCommitInfo,
     cover_image: nextPost.cover_image,
     live_url: nextPost.url,
+    pr_url: pr.html_url,
+    pr_number: pr.number,
+    payload_hash: payloadHash,
+    preview_started_at: Date.now(),
+    preview_status: "Preview queued",
     published_at: publishedAt,
     no_changes: false,
-    message: deployHookResult.deploy_hook_triggered
-      ? "Published successfully. Vercel deploy was triggered."
-      : `Published successfully, but deployment was not explicitly triggered. ${deployHookResult.deploy_hook_warning || ""}`.trim(),
-    ...deployHookResult,
+    message: "Publish PR created. Vercel preview will appear here automatically.",
     reading_time: nextPost.reading_time,
     word_count: nextPost.word_count
   };
+}
+
+async function updateRedirectsIfNeededOnBranch(originalSlug, nextSlug, commitMessage, branch) {
+  if (!originalSlug || !nextSlug || originalSlug === nextSlug) return null;
+  const redirectsPath = "content/redirects.json";
+  const existingRedirects = await githubApp.getFile(redirectsPath, branch);
+  const payload = existingRedirects ? JSON.parse(existingRedirects.content) : { redirects: [] };
+  const filtered = Array.isArray(payload.redirects) ? payload.redirects.filter((entry) => entry && entry.from !== originalSlug) : [];
+  filtered.push({ from: originalSlug, to: nextSlug });
+  return githubApp.putFile(
+    redirectsPath,
+    JSON.stringify({ redirects: filtered }, null, 2),
+    commitMessage,
+    branch,
+    existingRedirects ? existingRedirects.sha : undefined
+  );
 }
 
 module.exports = {

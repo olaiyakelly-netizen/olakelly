@@ -558,9 +558,14 @@ async function handleSignupSubmit(form) {
   }
 
   try {
+    const security = await fetch("/api/admin/security", { credentials: "same-origin" }).then((response) => response.json());
     const response = await fetch(SIGNUP_ENDPOINT, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": security.csrf || ""
+      },
       body: JSON.stringify({ email, source })
     });
 

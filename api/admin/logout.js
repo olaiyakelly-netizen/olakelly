@@ -1,12 +1,19 @@
 "use strict";
 
-const { COOKIE_NAME, sendJson } = require("./_lib");
+const { clearSessionCookie, destroySession } = require("../../lib/admin-auth");
+const { sendJson, validateCsrf, validateOrigin } = require("../../lib/security");
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return sendJson(res, 405, { error: "Method not allowed." });
   }
 
-  const cookie = `${COOKIE_NAME}=; HttpOnly; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; SameSite=Strict; Secure`;
-  return sendJson(res, 200, { ok: true }, { "Set-Cookie": cookie });
+  try {
+    validateOrigin(req);
+    validateCsrf(req, null);
+    await destroySession(req);
+  } catch (_error) {
+    // Logout should clear local credentials even when the session is already stale.
+  }
+  return sendJson(res, 200, { ok: true }, { "Set-Cookie": clearSessionCookie() });
 };

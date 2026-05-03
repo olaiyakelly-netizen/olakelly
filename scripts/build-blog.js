@@ -23,6 +23,7 @@ const postsDirectory = path.join(projectRoot, "content", "posts");
 const redirectsPath = path.join(projectRoot, "content", "redirects.json");
 const sitemapPath = path.join(projectRoot, "sitemap.xml");
 const robotsPath = path.join(projectRoot, "robots.txt");
+const buildLogPath = path.join(projectRoot, "data", "build-log.json");
 const SITEMAP_TIME_ZONE = "America/New_York";
 const staticPages = [
   path.join(projectRoot, "index.html"),
@@ -207,6 +208,10 @@ function loadRedirects() {
 }
 
 function buildIdeas() {
+  if (String(process.env.BUILDS_ENABLED || "true").toLowerCase() === "false") {
+    console.log("Build skipped because BUILDS_ENABLED=false.");
+    return;
+  }
   const buildDate = new Date();
   const staticPageModifiedDates = captureSourceModifiedDates(staticPages);
   const postSourceModifiedDates = getPostSourceModifiedDates();
@@ -278,8 +283,68 @@ function buildIdeas() {
   writeFile(path.join(projectRoot, "feed.xml"), createFeedXml(publishedPosts));
   writeFile(sitemapPath, createSitemapXml(sitemapEntries));
   writeRobotsTxt();
+  validateOutputIntegrity({ publishedPosts, sitemapEntries });
+  writeFile(buildLogPath, JSON.stringify({
+    generated_at: new Date().toISOString(),
+    status: "success",
+    published_posts: publishedPosts.length,
+    routes: sitemapEntries.map((entry) => entry.url).sort(),
+    validation: {
+      taxonomy: "passed",
+      sitemap: "passed",
+      drafts: "not-rendered",
+      unsafe_html: "checked"
+    }
+  }, null, 2));
 
   console.log(`Built ${publishedPosts.length} published posts.`);
+}
+
+function validateOutputIntegrity({ publishedPosts, sitemapEntries }) {
+  const publishedSlugs = new Set(publishedPosts.map((post) => post.slug));
+  const routeUrls = new Set(sitemapEntries.map((entry) => entry.url));
+
+  publishedPosts.forEach((post) => {
+    if (!routeUrls.has(`${SITE_URL}${post.url}`)) {
+      throw new Error(`Output integrity failed: sitemap is missing ${post.url}.`);
+    }
+  });
+
+  const posts = loadPosts(postsDirectory);
+  posts.filter((post) => post.status !== "published").forEach((draft) => {
+    const draftPath = path.join(projectRoot, "ideas", draft.slug, "index.html");
+    if (fs.existsSync(draftPath)) {
+      throw new Error(`Output integrity failed: draft route rendered for "${draft.slug}".`);
+    }
+  });
+
+  const ideasDirectory = path.join(projectRoot, "ideas");
+  if (fs.existsSync(ideasDirectory)) {
+    fs.readdirSync(ideasDirectory, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && !["category"].includes(entry.name))
+      .forEach((entry) => {
+        if (!publishedSlugs.has(entry.name)) {
+          const candidate = path.join(ideasDirectory, entry.name, "index.html");
+          if (fs.existsSync(candidate)) {
+            throw new Error(`Output integrity failed: stale idea route "${entry.name}" exists.`);
+          }
+        }
+      });
+  }
+
+  const unsafePatterns = [
+    /\son[a-z]+\s*=/i,
+    /javascript:/i
+  ];
+  publishedPosts.forEach((post) => {
+    const filePath = path.join(projectRoot, "ideas", post.slug, "index.html");
+    const html = fs.readFileSync(filePath, "utf8");
+    unsafePatterns.forEach((pattern) => {
+      if (pattern.test(html)) {
+        throw new Error(`Output integrity failed: unsafe HTML found in "${post.slug}".`);
+      }
+    });
+  });
 }
 
 buildIdeas();

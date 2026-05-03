@@ -7,7 +7,7 @@ module.exports = async function handler(req, res) {
     return sendJson(res, 405, { error: "Method not allowed." });
   }
 
-  if (!requireSession(req, res)) return;
+  if (!await requireSession(req, res)) return;
 
   try {
     const requestUrl = new URL(req.url, "http://localhost");

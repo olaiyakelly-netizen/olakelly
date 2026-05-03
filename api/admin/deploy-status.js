@@ -6,7 +6,7 @@ module.exports = async function handler(req, res) {
   if (req.method !== "GET") {
     return sendJson(res, 405, { error: "Method not allowed." });
   }
-  if (!requireSession(req, res)) return;
+  if (!await requireSession(req, res)) return;
 
   try {
     const status = await getLatestVercelDeploymentStatus();

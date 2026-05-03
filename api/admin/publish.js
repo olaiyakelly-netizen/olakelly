@@ -1,22 +1,45 @@
 "use strict";
 
-const { publishPostToGitHub, readJsonBody, requireSession, sendJson } = require("./_lib");
+const { z } = require("zod");
+const { publishPostToGitHub } = require("./_lib");
+const { getSession } = require("../../lib/admin-auth");
+const { hashPayload, secureAction } = require("../../lib/security");
+const { validatePostPayload } = require("../../lib/content-policy");
+
+const schema = z.object({}).passthrough();
 
 module.exports = async function handler(req, res) {
-  if (req.method !== "POST") {
-    return sendJson(res, 405, { error: "Method not allowed." });
-  }
-  if (!requireSession(req, res)) return;
-
-  try {
-    const body = await readJsonBody(req);
-    const result = await publishPostToGitHub(body);
-    return sendJson(res, 200, {
+  return secureAction(req, res, {
+    method: "POST",
+    schema,
+    getSession,
+    rateLimit: "publish",
+    flag: "PUBLISH_ENABLED",
+    auditType: "publish.pr",
+    getStepUpContext: ({ body, session, nonce }) => {
+      const stepUpProof = String(body.step_up_proof || "");
+      const payload = { ...body };
+      delete payload.step_up_proof;
+      const validated = validatePostPayload(payload);
+      return {
+        proof: stepUpProof,
+        action: "publish",
+        method: "POST",
+        route: "/api/admin/publish",
+        target: validated.slug || validated.title,
+        payloadHash: hashPayload(payload),
+        nonce
+      };
+    },
+    handler: async ({ body }) => {
+    const payload = { ...body };
+    delete payload.step_up_proof;
+    const result = await publishPostToGitHub(payload);
+    return {
       ok: true,
       mode: "publish",
       ...result
-    });
-  } catch (error) {
-    return sendJson(res, error.statusCode || 400, { error: error.message || "Publish failed." });
-  }
+    };
+    }
+  });
 };

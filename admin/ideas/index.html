@@ -7,13 +7,14 @@
 
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Allura&family=Lato:wght@300;400;700&family=Playfair+Display:wght@600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
-  <link rel="stylesheet" href="../../styles/main.css?v=20260428a">
+  <link rel="stylesheet" href="../../styles/main.css?v=20260503a">
 </head>
 <body class="h-full dark-mode">
   <main class="admin-main">
@@ -31,14 +32,24 @@
         <h1 class="font-heading admin-title">Ideas Admin</h1>
         <p class="font-body admin-copy">Write, preview, and publish Ideas using the same template as the live site.</p>
         <p class="font-body admin-login-note">Private publishing environment</p>
+        <button type="button" class="btn-primary admin-passkey-login" id="adminPasskeyLoginBtn">Use Passkey</button>
+        <details class="admin-disclosure admin-login-fallback">
+          <summary class="admin-disclosure-summary">
+            <span class="admin-kicker">Having trouble?</span>
+          </summary>
         <form id="adminLoginForm" class="admin-form admin-login-form">
           <div class="admin-field admin-login-field">
             <label class="admin-label" for="adminPassword">Password</label>
             <input id="adminPassword" name="password" type="password" class="admin-input" autocomplete="current-password" required>
-            <p class="admin-hint">Private admin access</p>
+            <p class="admin-hint">Fallback admin access requires authenticator code.</p>
+          </div>
+          <div class="admin-field admin-login-field">
+            <label class="admin-label" for="adminTotp">Authenticator code</label>
+            <input id="adminTotp" name="totp" type="text" class="admin-input" inputmode="numeric" autocomplete="one-time-code">
           </div>
           <button type="submit" class="btn-primary">ENTER ADMIN</button>
         </form>
+        </details>
         <p id="adminLoginMessage" class="admin-message" aria-live="polite"></p>
       </div>
 
@@ -174,6 +185,7 @@
                 <div class="admin-section-stack">
                   <div class="admin-stats-meta admin-stats-row-compact">
                     <div class="admin-stat"><span>Slug</span><strong id="previewSlug">-</strong></div>
+                    <div class="admin-stat"><span>State</span><strong id="draftStateIndicator">Current Draft</strong></div>
                     <div class="admin-stats-inline">
                       <div class="admin-stat"><span>Read time</span><strong id="previewReadTime">-</strong></div>
                       <div class="admin-stat"><span>Word count</span><strong id="previewWordCount">-</strong></div>
@@ -328,6 +340,37 @@
                 <iframe id="previewFrame" class="admin-preview-frame is-hidden" title="Live site preview"></iframe>
               </section>
 
+              <section class="admin-preview-panel admin-publish-preview-panel" id="publishPreviewPanel">
+                <div class="admin-panel-head admin-preview-head">
+                  <div>
+                    <p class="admin-kicker">Publish Preview</p>
+                    <h2 class="font-heading admin-panel-title">Vercel PR Preview</h2>
+                  </div>
+                  <span class="admin-preview-state" id="publishPreviewState">Not published</span>
+                </div>
+                <div class="admin-publish-preview-meta">
+                  <span>Branch: <strong id="publishPreviewBranch">-</strong></span>
+                  <span>Commit: <strong id="publishPreviewCommit">-</strong></span>
+                  <span>Checked: <strong id="publishPreviewChecked">-</strong></span>
+                  <span class="is-hidden" id="publishPreviewElapsedWrap">Elapsed: <strong id="publishPreviewElapsed">-</strong></span>
+                </div>
+                <div class="admin-publish-preview-actions">
+                  <a class="btn-secondary is-hidden" id="publishPreviewPrLink" target="_blank" rel="noreferrer">Open PR</a>
+                  <a class="btn-secondary is-hidden" id="publishPreviewOpenLink" target="_blank" rel="noreferrer">Open Preview</a>
+                </div>
+                <div class="admin-preview-placeholder" id="publishPreviewPlaceholder">Publish a draft to create a PR preview.</div>
+                <iframe id="publishPreviewFrame" class="admin-preview-frame is-hidden" title="Vercel publish preview"></iframe>
+              </section>
+
+              <section class="admin-preview-panel admin-security-panel">
+                <div class="admin-panel-head">
+                  <p class="admin-kicker">Security Signals</p>
+                </div>
+                <div class="admin-security-events" id="adminSecurityEvents">
+                  <p class="admin-preview-placeholder">No high-signal events in the last hour.</p>
+                </div>
+              </section>
+
               <p id="adminEditorMessage" class="admin-message" aria-live="polite"></p>
               <p id="adminDeployStatus" class="admin-message admin-inline-message" aria-live="polite"></p>
             </section>
@@ -337,6 +380,19 @@
     </section>
   </main>
 
-  <script src="../../scripts/admin-ideas.js?v=20260428a"></script>
+  <div class="admin-stepup-modal is-hidden" id="adminStepUpModal" aria-live="polite">
+    <div class="admin-stepup-dialog">
+      <p class="admin-kicker">Passkey Required</p>
+      <h2 class="font-heading admin-panel-title">Confirm publish</h2>
+      <p class="font-body admin-copy">Use your passkey to approve this exact publish request.</p>
+      <div class="admin-action-buttons">
+        <button type="button" class="btn-secondary" id="adminStepUpCancelBtn">Cancel</button>
+        <button type="button" class="btn-primary" id="adminStepUpConfirmBtn">Use Passkey</button>
+      </div>
+      <p class="admin-message" id="adminStepUpMessage"></p>
+    </div>
+  </div>
+
+  <script src="../../scripts/admin-ideas.js?v=20260503a"></script>
 </body>
 </html>

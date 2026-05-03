@@ -2462,6 +2462,94 @@ input:focus-visible,
   gap: 18px;
 }
 
+.admin-passkey-login {
+  width: 100%;
+  margin: 1rem 0 0.75rem;
+}
+
+.admin-login-fallback {
+  margin-top: 0.5rem;
+}
+
+.admin-preview-state {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: #14342b;
+  background: #dcefe6;
+}
+
+.admin-publish-preview-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem 1rem;
+  margin: 0.75rem 0 1rem;
+  font-size: 0.82rem;
+  color: #5c665f;
+}
+
+.admin-publish-preview-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.admin-security-events {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.admin-security-event {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(20, 52, 43, 0.14);
+  border-radius: 8px;
+  font-size: 0.82rem;
+}
+
+.admin-stepup-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(9, 21, 17, 0.62);
+}
+
+.admin-stepup-dialog {
+  width: min(420px, 100%);
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: #f7f3ea;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+}
+
+html.dark-mode .admin-preview-state {
+  color: #dcefe6;
+  background: rgba(97, 133, 114, 0.28);
+}
+
+html.dark-mode .admin-publish-preview-meta {
+  color: #c4cec8;
+}
+
+html.dark-mode .admin-security-event {
+  border-color: rgba(220, 239, 230, 0.16);
+}
+
+html.dark-mode .admin-stepup-dialog {
+  background: #111b17;
+}
+
 .admin-taxonomy-field {
   border: 0;
   margin: 0;
