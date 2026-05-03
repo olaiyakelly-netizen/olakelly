@@ -2469,6 +2469,19 @@ input:focus-visible,
 
 .admin-login-fallback {
   margin-top: 0.5rem;
+  padding: 1rem 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+.admin-login-fallback[open] {
+  padding-bottom: 0;
+}
+
+.admin-login-fallback .admin-login-form {
+  margin-top: 1rem;
 }
 
 .admin-preview-state {
@@ -2548,6 +2561,10 @@ html.dark-mode .admin-security-event {
 
 html.dark-mode .admin-stepup-dialog {
   background: #111b17;
+}
+
+html.dark-mode .admin-login-fallback {
+  background: transparent;
 }
 
 .admin-taxonomy-field {

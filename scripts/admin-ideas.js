@@ -790,7 +790,15 @@
         ...(options.headers || {})
       }
     });
-    const data = await response.json().catch(() => ({}));
+    const raw = await response.text();
+    let data = {};
+    try {
+      data = raw ? JSON.parse(raw) : {};
+    } catch (_error) {
+      data = {
+        error: response.ok ? "" : "The server returned an unreadable response. Check the function logs for details."
+      };
+    }
     if (method !== "GET") {
       nextNonce = "";
       refreshSecurityState().catch(() => {});
