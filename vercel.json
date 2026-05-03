@@ -3,6 +3,15 @@
   "trailingSlash": true,
   "headers": [
     {
+      "source": "/admin/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
       "source": "/data/(.*)",
       "headers": [
         {
