@@ -27,7 +27,7 @@ module.exports = async function handler(req, res) {
       slug: draft.slug,
       published_slug: draft.published_slug,
       updated_at: draft.updated_at,
-      message: "Draft saved securely."
+      message: `Draft saved securely. Draft ID: ${draft.draft_id}`
     };
     }
   });
